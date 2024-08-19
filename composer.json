@@ -11,7 +11,7 @@
     "require": {},
     "autoload": {
         "psr-4":{
-            "Framweork\\": "src/Framweork",
+            "Framework\\": "src/Framework",
             "App\\": "src/App"
         }
     }
