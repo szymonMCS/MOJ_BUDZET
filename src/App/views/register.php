@@ -127,7 +127,7 @@
 
   <title><?php echo e($title); ?> - Budżet domowy</title>
   <script src="https://www.google.com/recaptcha/api.js"></script>
-  <link rel="icon" type="image/png" sizes="32x32" href="./images/icons/coin.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/coin.svg">
   <link rel="stylesheet" href="registerStyle.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -146,8 +146,8 @@
 
   <header class="container">
     <div class="d-flex flex-wrap justify-content-between py-3 border-bottom">
-      <a href="http://127.0.0.1:3000/ZZZ_budzet domowy/welcomePage.html" class="d-flex align-items-center mb-3 mb-md-0 me-2 link-body-emphasis text-decoration-none">
-        <img src="./images/icons/swinka-domek-tlo.png" class="bi me-2" width="80" height="80"></img>
+      <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-2 link-body-emphasis text-decoration-none">
+        <img src="/images/swinkalogo.png" class="bi me-2" width="80" height="80"></img>
         <h2 id="main-name">
           <span>Mój</span>
           <span>Budżet</span>
@@ -155,8 +155,8 @@
       </a>
 
       <ul class="nav nav-pills align-content-center ms-2">
-        <li class="nav-item me-1"><a href="logowanie.php" class="nav-link active" aria-current="page">Logowanie</a></li>
-        <li class="nav-item ms-1"><a href="rejestracja.php" class="nav-link">Rejestracja</a></li>
+        <li class="nav-item me-1"><a href="/login" class="nav-link active" aria-current="page">Logowanie</a></li>
+        <li class="nav-item ms-1"><a href="/register" class="nav-link">Rejestracja</a></li>
       </ul>
     </div>
   </header>
@@ -175,7 +175,7 @@
                                                                                                     unset($_SESSION['fr_username']);
                                                                                                   }
                                                                                                   ?>" name="username" />
-            <label for="floatingInput"><img src="./images/icons/person.svg" class="me-3" alt="minus icon" width="25" height="20">Imie</label>
+            <label for="floatingInput"><img src="/images/person.svg" class="me-3" alt="minus icon" width="25" height="20">Imie</label>
           </div>
 
           <?php
@@ -192,7 +192,7 @@
                                                                                                                 unset($_SESSION['fr_email']);
                                                                                                               }
                                                                                                               ?>" name="email" />
-            <label for="floatingPassword"><img src="./images/icons/envelope.svg" class="me-3" alt="envelope" width="25" height="20">E-mail</label>
+            <label for="floatingPassword"><img src="/images/envelope.svg" class="me-3" alt="envelope" width="25" height="20">E-mail</label>
           </div>
 
           <?php
@@ -209,7 +209,7 @@
                                                                                                               unset($_SESSION['fr_password1']);
                                                                                                             }
                                                                                                             ?>" name="password1" />
-            <label for="floatingInput"><img src="./images/icons/lock.svg" class="me-3" alt="locker" width="25" height="20">Hasło</label>
+            <label for="floatingInput"><img src="/images/lock.svg" class="me-3" alt="locker" width="25" height="20">Hasło</label>
           </div>
 
           <?php
@@ -226,7 +226,7 @@
                                                                                                               unset($_SESSION['fr_password2']);
                                                                                                             }
                                                                                                             ?>" name="password2" />
-            <label for="floatingInput"><img src="./images/icons/lock.svg" class="me-3" alt="locker" width="25" height="20">Powtórz hasło</label>
+            <label for="floatingInput"><img src="/images/lock.svg" class="me-3" alt="locker" width="25" height="20">Powtórz hasło</label>
           </div>
 
 
@@ -290,35 +290,7 @@
 
   </main>
 
-  <footer>
-    <div class="container mt-4 pt-4">
-      <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
-        <div class="col-md-4 d-flex align-items-center">
-          <a href="/" class="mb-3 me-2 mb-md-0 text-body-secondary text-decoration-none lh-1">
-            <img src="./images/icons/coin.svg" class="bi" width="30" height="24">
-            <use></use></img>
-          </a>
-          <span class="mb-3 mb-md-0 text-body-secondary">© 2024 Mój Budżet, Inc</span>
-        </div>
-
-        <ul class="nav col-md-4 justify-content-end list-unstyled d-flex">
-          <li class="ms-3"><a class="text-body-secondary" href="#"><img src="./images/icons/twitter-x.svg" class="bi" width="24" height="24">
-              <use xlink:href="#twitter"></use></img>
-            </a></li>
-          <li class="ms-3"><a class="text-body-secondary" href="#"><img src="./images/icons/instagram.svg" class="bi" width="24" height="24">
-              <use xlink:href="#instagram"></use></img>
-            </a></li>
-          <li class="ms-3"><a class="text-body-secondary" href="#"><img src="./images/icons/facebook.svg" class="bi" width="24" height="24">
-              <use xlink:href="#facebook"></use></img>
-            </a></li>
-        </ul>
-      </footer>
-    </div>
-  </footer>
-
-
-
-
+  <?php include $this->resolve("partials/_footer.php"); ?>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
   <script src="welcomeIndex.js" charset="utf-8"></script>

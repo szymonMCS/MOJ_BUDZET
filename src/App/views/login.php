@@ -7,7 +7,7 @@
 
   <title><?php echo e($title); ?> - Budżet domowy</title>
 
-  <link rel="icon" type="image/png" sizes="32x32" href="./images/icons/coin.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/coin.svg">
   <link rel="stylesheet" href="registerStyle.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -26,8 +26,8 @@
 
   <header class="container">
     <div class="d-flex flex-wrap justify-content-between py-3 border-bottom">
-      <a href="index.php" class="d-flex align-items-center mb-3 mb-md-0 me-2 link-body-emphasis text-decoration-none">
-        <img src="./images/icons/swinka-domek-tlo.png" class="bi me-2" width="80" height="80"></img>
+      <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-2 link-body-emphasis text-decoration-none">
+        <img src="/images/swinkalogo.png" class="bi me-2" width="80" height="80"></img>
         <h2 id="main-name">
           <span>Mój</span>
           <span>Budżet</span>
@@ -35,8 +35,8 @@
       </a>
 
       <ul class="nav nav-pills align-content-center ms-2">
-        <li class="nav-item me-1"><a href="login.php" class="nav-link active" aria-current="page">Logowanie</a></li>
-        <li class="nav-item ms-1"><a href="register.php" class="nav-link">Rejestracja</a></li>
+        <li class="nav-item me-1"><a href="/login" class="nav-link active" aria-current="page">Logowanie</a></li>
+        <li class="nav-item ms-1"><a href="/register" class="nav-link">Rejestracja</a></li>
       </ul>
     </div>
   </header>
@@ -50,11 +50,11 @@
         <form action="login.php" method="post" class="p-4 p-md-5 border rounded-3 .bg-light-subtle">
           <div class="form-floating mb-3">
             <input type="email" name="email" class="form-control" id="floatingInput" placeholder="name@example.com">
-            <label for="floatingPassword"><img src="./images/icons/envelope.svg" class="me-3" alt="envelope" width="25" height="20">E-mail</label>
+            <label for="floatingPassword"><img src="/images/envelope.svg" class="me-3" alt="envelope" width="25" height="20">E-mail</label>
           </div>
           <div class="form-floating mb-3">
             <input type="password" name="password" class="form-control" id="floatingPassword" placeholder="Password">
-            <label for="floatingInput"><img src="./images/icons/lock.svg" class="me-3" alt="locker" width="25" height="20">Hasło</label>
+            <label for="floatingInput"><img src="/images/lock.svg" class="me-3" alt="locker" width="25" height="20">Hasło</label>
           </div>
 
           <button type="submit" class="w-100 btn btn-lg btn-primary mt-4">
