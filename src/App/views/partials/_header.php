@@ -2,7 +2,7 @@
   <div class="d-flex flex-wrap justify-content-between py-3 border-bottom">
     <div>
       <a href="/home" class="d-flex align-items-center mb-3 mb-md-0 me-2 link-body-emphasis text-decoration-none">
-        <img src="./images/icons/swinka-domek-tlo.png" class="bi me-2" width="80" height="80"></img>
+        <img src="/images/swinkalogo.png" class="bi me-2" width="80" height="80"></img>
         <h1 id="main-name">
           <span>Mój</span>
           <span>Budżet</span>
@@ -20,22 +20,22 @@
 
       <div class="flex-shrink-0 dropdown ms-2">
         <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-          <img src="./images/icons/person-circle.svg" alt="mdo" width="32" height="32" class="rounded-circle">
+          <img src="/images/person-circle.svg" alt="mdo" width="32" height="32" class="rounded-circle">
         </a>
         <ul class="dropdown-menu text-small shadow" style="position: absolute; inset: 0px 0px auto auto; margin: 0px; transform: translate3d(0.5px, 34px, 0px);" data-popper-placement="bottom-end">
           <li class="dropdown-flex">
-            <img src="./images/icons/person-lines-fill.svg" alt="profile" width="20" height="20">
+            <img src="/images/person-lines-fill.svg" alt="profile" width="20" height="20">
             <a class="dropdown-item" href="#">Profil</a>
           </li>
           <li class="dropdown-flex">
-            <img src="./images/icons/trybik.png" alt="gear" width="20" height="20">
+            <img src="/images/trybik.png" alt="gear" width="20" height="20">
             <a class="dropdown-item" href="#">Ustawienia</a>
           </li>
           <li>
             <hr class="dropdown-divider">
           </li>
           <li class="dropdown-flex">
-            <img src="./images/icons/power.svg" alt="house" width="20" height="20">
+            <img src="/images/power.svg" alt="house" width="20" height="20">
             <a class="dropdown-item" href="logout.php">Wyloguj</a>
           </li>
         </ul>
@@ -54,16 +54,16 @@
       <div class="collapse navbar-collapse justify-content-md-center" id="navbarsExample10">
         <ul class="navbar-nav align-items-center">
           <li class="nav-item">
-            <a class="nav-link ps-3" href="/home"><img class="me-2" src="./images/icons/domek.png" alt="house" width="30" height="25">Strona główna</a>
+            <a class="nav-link ps-3" href="/home"><img class="me-2" src="/images/domek.png" alt="house" width="30" height="25">Strona główna</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link ps-3" href="/income"><img class="me-2" src="./images/icons/plus.png" alt="plus icon" width="25" height="24">Dodaj przychód</a>
+            <a class="nav-link ps-3" href="/income"><img class="me-2" src="/images/plus.png" alt="plus icon" width="25" height="24">Dodaj przychód</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link ps-3" href="/outcome"><img class="me-2" src="./images/icons/minus.png" alt="minus icon" width="26" height="30">Dodaj wydatek</a>
+            <a class="nav-link ps-3" href="/outcome"><img class="me-2" src="/images/minus.png" alt="minus icon" width="26" height="30">Dodaj wydatek</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link ps-3" href="/balance"><img class="me-2" src="./images/icons/wykres.png" alt="bar diagram" width="30" height="30">Przedstaw bilans</a>
+            <a class="nav-link ps-3" href="/balance"><img class="me-2" src="/images/wykres.png" alt="bar diagram" width="30" height="30">Przedstaw bilans</a>
           </li>
 
 

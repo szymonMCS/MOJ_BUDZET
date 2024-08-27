@@ -14,7 +14,7 @@
 
   <title><?php echo e($title); ?> - Budżet domowy</title>
 
-  <link rel="icon" type="image/png" sizes="32x32" href="./images/icons/coin.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/coin.svg">
   <link rel="stylesheet" href="welcomeStyle.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -27,10 +27,11 @@
   <header class="container">
     <div class="d-flex flex-wrap justify-content-between py-3 border-bottom">
       <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-2 link-body-emphasis text-decoration-none">
-        <img src="../../../images/swinka-domek-tlo.png" class="bi me-2" width="80" height="80"></img>
+        <img src="/images/swinkalogo.png" alt="logo strony świnka skarbonka" class="bi me-2" width="80" height="80"></img>
         <h2 id="main-name">
           <span>Mój</span>
           <span>Budżet</span>
+
         </h2>
       </a>
 
