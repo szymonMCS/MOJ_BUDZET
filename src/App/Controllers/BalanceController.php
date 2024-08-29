@@ -13,8 +13,6 @@ class BalanceController
 
   public function balance()
   {
-    echo $this->view->render("balance.php", [
-      'title' => 'Balance page'
-    ]);
+    echo $this->view->render("balance.php");
   }
 }

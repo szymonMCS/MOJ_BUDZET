@@ -13,8 +13,6 @@ class IncomeController
 
   public function income()
   {
-    echo $this->view->render("incomes.php", [
-      'title' => 'Income page'
-    ]);
+    echo $this->view->render("incomes.php");
   }
 }
