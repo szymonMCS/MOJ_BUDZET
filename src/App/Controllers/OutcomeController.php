@@ -13,8 +13,6 @@ class OutcomeController
 
   public function outcome()
   {
-    echo $this->view->render("outcomes.php", [
-      'title' => 'Outcomes page'
-    ]);
+    echo $this->view->render("outcomes.php");
   }
 }

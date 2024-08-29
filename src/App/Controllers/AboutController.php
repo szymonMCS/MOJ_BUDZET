@@ -13,8 +13,6 @@ class AboutController
 
   public function about()
   {
-    echo $this->view->render("index.php", [
-      'title' => 'About page'
-    ]);
+    echo $this->view->render("index.php");
   }
 }
