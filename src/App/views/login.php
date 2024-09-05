@@ -15,7 +15,10 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
   <style>
     .error {
-      color: red;
+      --tw-bg-opacity: 1;
+      background-color: rgb(243 244 246 / var(--tw-bg-opacity));
+      --tw-text-opacity: 1;
+      color: rgb(239 68 68 / var(--tw-text-opacity));
       margin-top: 10px;
       margin-bottom: 10px;
     }
