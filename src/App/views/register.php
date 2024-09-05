@@ -1,69 +1,8 @@
 <?php
 /*
-	session_start();
-	
-	if(isset($_POST['email'])){
-		$everything_ok = true;
-		$_SESSION['success_registration'] = false;
-		
-		$username = filter_input(INPUT_POST, 'username', FILTER_SANITIZE_STRING);
-		
-		if((strlen($username) < 3) || (strlen($username) > 20)){
-			$everything_ok = false;
-			$_SESSION['e_username'] = "Imie musi posiadać od 3 do 20 znaków";
-		}
-		
-		if(ctype_alpha($username) == false){
-			$everything_ok = false;
-			$_SESSION['e_username'] = "Imie może skladać się tylko z liter (bez poslich znaków)";
-		}
-		
-		$email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
-		$email = strtolower($email);
-		if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
-			$everything_ok = false;
-			$_SESSION['e_email'] = "Podaj poprawny adres e-mail";
-		}
-		
-		$password1 = $_POST['password1'];
-		$password2 = $_POST['password2'];
-		
-		if(strlen($password1) < 8 || (strlen($password1) > 20)){
-			$everything_ok = false;
-			$_SESSION['e_password'] = "Hasło musi posiadać od 8 do 20 znaków";
-		}
-		
-		if($password1 != $password2){
-			$everything_ok = false;
-			$_SESSION['e_password'] = "Podane hasła nie sąidentyczne";
-		}
-		
-		if(!isset($_POST['terms'])){
-			$everything_ok = false;
-			$_SESSION['e_terms'] = "Zaakceptuj regulamin";
-		}
-		
 		$password_hash = password_hash($password1, PASSWORD_DEFAULT);
 		
-		
-		$secret = "6Ld2BfspAAAAAG0Db_zFJfL-2Vnnfy5mqWPrbkI3";
-		$check = file_get_contents('https://www.google.com/recaptcha/api/siteverify?secret='.$secret.'&response='.$_POST[
-		'g-recaptcha-response']);
-		$response = json_decode($check);
-		
-		if($response->success==false){
-			$everything_ok = false;
-			$_SESSION['e_bot'] = "Potwirdz że nie jesteś botem";
-		}
-		
-		$_SESSION['fr_username'] = $username;
-		$_SESSION['fr_email'] = $email;
-		$_SESSION['fr_password1'] = $password1;
-		$_SESSION['fr_password2'] = $password2;
-		if(isset($_POST['terms']))$_SESSION['fr_terms'] = true;
-		
 		require_once "database.php";
-		
 
 		$emailquery = $db->prepare('SELECT id FROM users WHERE email= :email');
 		$emailquery->bindValue(':email', $email, PDO::PARAM_STR);
@@ -126,7 +65,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title><?php echo e($title); ?> - Budżet domowy</title>
-  <script src="https://www.google.com/recaptcha/api.js"></script>
+  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
   <link rel="icon" type="image/png" sizes="32x32" href="/images/coin.svg">
   <link rel="stylesheet" href="registerStyle.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -135,7 +74,10 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
   <style>
     .error {
-      color: red;
+      --tw-bg-opacity: 1;
+      background-color: rgb(243 244 246 / var(--tw-bg-opacity));
+      --tw-text-opacity: 1;
+      color: rgb(239 68 68 / var(--tw-text-opacity));
       margin-top: 10px;
       margin-bottom: 10px;
     }
@@ -169,93 +111,70 @@
         </div>
         <form class="p-4 p-md-5 border rounded-3 .bg-light-subtle" method="post">
           <div class="form-floating mb-3">
-            <input type="text" class="form-control" id="floatingInput" placeholder="Imie" value="<?php
-                                                                                                  if (isset($_SESSION['fr_username'])) {
-                                                                                                    echo $_SESSION['fr_username'];
-                                                                                                    unset($_SESSION['fr_username']);
-                                                                                                  }
-                                                                                                  ?>" name="username" />
+            <input type="text" class="form-control" id="floatingInput" placeholder="Imie" value="<?php echo e($oldFormData['username'] ?? ''); ?>" name="username" />
             <label for="floatingInput"><img src="/images/person.svg" class="me-3" alt="minus icon" width="25" height="20">Imie</label>
           </div>
 
-          <?php
-          if (isset($_SESSION['e_username'])) {
-            echo '<div class="error">' . $_SESSION['e_username'] . '</div>';
-            unset($_SESSION['e_username']);
-          }
-          ?>
+          <?php if (array_key_exists('username', $errors)) : ?>
+            <div class="error">
+              <?php echo e($errors['username'][0]); ?>
+            </div>
+          <?php endif; ?>
 
           <div class="form-floating mb-3">
-            <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com" value="<?php
-                                                                                                              if (isset($_SESSION['fr_email'])) {
-                                                                                                                echo $_SESSION['fr_email'];
-                                                                                                                unset($_SESSION['fr_email']);
-                                                                                                              }
-                                                                                                              ?>" name="email" />
+            <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com" value="<?php echo e($oldFormData['email'] ?? ''); ?>" name="email" />
             <label for="floatingPassword"><img src="/images/envelope.svg" class="me-3" alt="envelope" width="25" height="20">E-mail</label>
           </div>
 
-          <?php
-          if (isset($_SESSION['e_email'])) {
-            echo '<div class="error">' . $_SESSION['e_email'] . '</div>';
-            unset($_SESSION['e_email']);
-          }
-          ?>
+          <?php if (array_key_exists('email', $errors)) : ?>
+            <div class="error">
+              <?php echo e($errors['email'][0]); ?>
+            </div>
+          <?php endif; ?>
 
           <div class="form-floating mb-3">
-            <input type="password" class="form-control" id="floatingPassword" placeholder="password" value="<?php
-                                                                                                            if (isset($_SESSION['fr_password1'])) {
-                                                                                                              echo $_SESSION['fr_password1'];
-                                                                                                              unset($_SESSION['fr_password1']);
-                                                                                                            }
-                                                                                                            ?>" name="password1" />
+            <input type="password" class="form-control" id="floatingPassword" placeholder="password" name="password" />
             <label for="floatingInput"><img src="/images/lock.svg" class="me-3" alt="locker" width="25" height="20">Hasło</label>
           </div>
 
-          <?php
-          if (isset($_SESSION['e_password'])) {
-            echo '<div class="error">' . $_SESSION['e_password'] . '</div>';
-            unset($_SESSION['e_password']);
-          }
-          ?>
+          <?php if (array_key_exists('password', $errors)) : ?>
+            <div class="error">
+              <?php echo e($errors['password'][0]); ?>
+            </div>
+          <?php endif; ?>
 
           <div class="form-floating mb-3">
-            <input type="password" class="form-control" id="floatingPassword" placeholder="password" value="<?php
-                                                                                                            if (isset($_SESSION['fr_password2'])) {
-                                                                                                              echo $_SESSION['fr_password2'];
-                                                                                                              unset($_SESSION['fr_password2']);
-                                                                                                            }
-                                                                                                            ?>" name="password2" />
+            <input type="password" class="form-control" id="floatingPassword" placeholder="password" name="confirmPassword" />
             <label for="floatingInput"><img src="/images/lock.svg" class="me-3" alt="locker" width="25" height="20">Powtórz hasło</label>
           </div>
+
+          <?php if (array_key_exists('confirmPassword', $errors)) : ?>
+            <div class="error">
+              <?php echo e($errors['confirmPassword'][0]); ?>
+            </div>
+          <?php endif; ?>
 
 
 
           <div class="checkbox mb-3">
             <label>
-              <input type="checkbox" name="terms" <?php
-                                                  if (isset($_SESSION['fr_terms'])) {
-                                                    echo "checked";
-                                                    unset($_SESSION['fr_terms']);
-                                                  }
-                                                  ?> /> Akceptuje regulamin
+              <input type="checkbox" name="tos" <?php echo $oldFormData['tos'] ?? false ? 'checked' : ''; ?> /> Akceptuje regulamin
             </label>
           </div>
 
-          <?php
-          if (isset($_SESSION['e_terms'])) {
-            echo '<div class="error">' . $_SESSION['e_terms'] . '</div>';
-            unset($_SESSION['e_terms']);
-          }
-          ?>
+          <?php if (array_key_exists('tos', $errors)) : ?>
+            <div class="error">
+              <?php echo e($errors['tos'][0]); ?>
+            </div>
+          <?php endif; ?>
 
-          <div class="g-recaptcha" data-sitekey="6Ld2BfspAAAAAA0f9YMisUrB4U4Fob2dcIICtP5y"></div></br>
-          <?php
-          if (isset($_SESSION['e_bot'])) {
-            echo '<div class="error">' . $_SESSION['e_bot'] . '</div>';
-            unset($_SESSION['e_bot']);
-          }
-          ?>
+          <div class="g-recaptcha" data-sitekey="6LcavzYqAAAAAOYogrEPZ1e2ar5nXeLjsfrFeVkh"></div></br>
+
+          <?php if (array_key_exists('bot', $errors)) : ?>
+            <div class="error">
+              <?php echo e($errors['bot'][0]); ?>
+            </div>
+          <?php endif; ?>
 
           <button type="submit" class="w-100 btn btn-lg btn-primary mt-4">
             Zarejestruj
@@ -293,7 +212,6 @@
   <?php include $this->resolve("partials/_footer.php"); ?>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-  <script src="welcomeIndex.js" charset="utf-8"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function() {
       <?php
