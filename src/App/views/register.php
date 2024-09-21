@@ -1,62 +1,3 @@
-<?php
-/*
-		$password_hash = password_hash($password1, PASSWORD_DEFAULT);
-		
-		require_once "database.php";
-
-		$emailquery = $db->prepare('SELECT id FROM users WHERE email= :email');
-		$emailquery->bindValue(':email', $email, PDO::PARAM_STR);
-		$emailquery->execute();
-		
-		$isEmailInBase = $emailquery->rowCount();
-		
-		if($isEmailInBase > 0){
-			$everything_ok = false;
-			$_SESSION['e_email'] = "Istnieje już konto przypisane do tego adresu e-mail.";
-		}
-		
-		if($everything_ok){	
-			$query = $db->prepare('INSERT INTO users VALUES (NULL, :username, :password, :email)');
-			$query->bindValue(':username', $username, PDO::PARAM_STR);
-			$query->bindValue(':password', $password_hash, PDO::PARAM_STR);
-			$query->bindValue(':email', $email, PDO::PARAM_STR);
-			$query->execute();
-			
-			$idquery = $db->prepare('SELECT id FROM users WHERE email= :email');
-			$idquery->bindValue(':email', $email, PDO::PARAM_STR);
-			$idquery->execute();
-			
-			$user = $idquery->fetch(PDO::FETCH_ASSOC);
-			$user_id = $user['id']; 
-			
-			$copyIncomesCategories = $db->prepare('INSERT INTO incomes_category_assigned_to_users (user_id , name) 
-												   SELECT :id, name
-												   FROM incomes_category_default');
-			$copyIncomesCategories->bindValue(':id', $user_id, PDO::PARAM_STR);
-			$copyIncomesCategories->execute();
-			
-			$copyOutcomesCategories = $db->prepare('INSERT INTO expenses_category_assigned_to_users (user_id , name) 
-													SELECT :id, name
-													FROM expenses_category_default');
-			$copyOutcomesCategories->bindValue(':id', $user_id, PDO::PARAM_STR);
-			$copyOutcomesCategories->execute();
-			
-			$copyPaymentMethods = $db->prepare('INSERT INTO payment_methods_assigned_to_users (user_id , name) 
-												SELECT :id, name
-												FROM payment_methods_default');
-			$copyPaymentMethods->bindValue(':id', $user_id, PDO::PARAM_STR);
-			$copyPaymentMethods->execute();
-			
-			unset($_SESSION['e_email']);
-			unset($_SESSION['e_password']);
-			unset($_SESSION['e_terms']);
-			unset($_SESSION['e_bot']);
-			$_SESSION['success_registration'] = true;
-		}
-	}		
-*/
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -65,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title><?php echo e($title); ?> - Budżet domowy</title>
-  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+  <script src="https://www.google.com/recaptcha/enterprise.js" async defer></script>
   <link rel="icon" type="image/png" sizes="32x32" href="/images/coin.svg">
   <link rel="stylesheet" href="registerStyle.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -110,6 +51,7 @@
           <h4 id="rejestracja" class="my-0 fw-normal text-center">REJESTRACJA</h4>
         </div>
         <form class="p-4 p-md-5 border rounded-3 .bg-light-subtle" method="post">
+          <?php include $this->resolve('partial/_csrd.php'); ?>
           <div class="form-floating mb-3">
             <input type="text" class="form-control" id="floatingInput" placeholder="Imie" value="<?php echo e($oldFormData['username'] ?? ''); ?>" name="username" />
             <label for="floatingInput"><img src="/images/person.svg" class="me-3" alt="minus icon" width="25" height="20">Imie</label>
@@ -168,7 +110,8 @@
             </div>
           <?php endif; ?>
 
-          <div class="g-recaptcha" data-sitekey="6LcavzYqAAAAAOYogrEPZ1e2ar5nXeLjsfrFeVkh"></div></br>
+          <div class="g-recaptcha" data-sitekey="6LefBT8qAAAAAPWE6aPWX_SFl9L_d4YIducHCfq4"></div>
+          </br>
 
           <?php if (array_key_exists('bot', $errors)) : ?>
             <div class="error">
@@ -191,9 +134,11 @@
                   Zdecyduj czy chcesz zalogować się od razu czy wrócić do strony głównej?
                 </div>
                 <div class="modal-footer">
-                  <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Anuluj</button>
+                  <div class="btn btn-danger">
+                    <a href="/" class="nav-link active" aria-current="page">Wróć</a>
+                  </div>
                   <div class="btn btn-primary">
-                    <a href="logowanie.php" class="nav-link active" aria-current="page">Zaloguj</a>
+                    <a href="/login" class="nav-link active" aria-current="page">Zaloguj</a>
                   </div>
                 </div>
               </div>

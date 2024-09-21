@@ -50,15 +50,30 @@
         <div class="card-header py-3">
           <h4 id="rejestracja" class="my-0 fw-normal text-center">LOGOWANIE</h4>
         </div>
-        <form action="login.php" method="post" class="p-4 p-md-5 border rounded-3 .bg-light-subtle">
+        <form method="post" class="p-4 p-md-5 border rounded-3 .bg-light-subtle">
+          <?php include $this->resolve('partials/_csrf.php'); ?>
+
           <div class="form-floating mb-3">
-            <input type="email" name="email" class="form-control" id="floatingInput" placeholder="name@example.com">
+            <input type="email" name="email" class="form-control" id="floatingInput" placeholder="name@example.com" value="<?php echo e($oldFormData['email'] ?? ''); ?>" name="email">
             <label for="floatingPassword"><img src="/images/envelope.svg" class="me-3" alt="envelope" width="25" height="20">E-mail</label>
           </div>
+
+          <?php if (array_key_exists('email', $errors)) : ?>
+            <div class="error">
+              <?php echo e($errors['email'][0]); ?>
+            </div>
+          <?php endif; ?>
+
           <div class="form-floating mb-3">
             <input type="password" name="password" class="form-control" id="floatingPassword" placeholder="Password">
             <label for="floatingInput"><img src="/images/lock.svg" class="me-3" alt="locker" width="25" height="20">Hasło</label>
           </div>
+
+          <?php if (array_key_exists('password', $errors)) : ?>
+            <div class="error">
+              <?php echo e($errors['password'][0]); ?>
+            </div>
+          <?php endif; ?>
 
           <button type="submit" class="w-100 btn btn-lg btn-primary mt-4">
             Zaloguj
@@ -68,7 +83,7 @@
           <p class="text">Nie masz jeszcze u nas konta?</p>
 
           <div class="w-100 btn btn-lg btn-primary mt-4">
-            <a href="register.php" class="nav-link active" aria-current="page">Rejestracja</a>
+            <a href="/register" class="nav-link active" aria-current="page">Rejestracja</a>
           </div>
         </form>
       </div>

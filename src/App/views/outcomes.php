@@ -117,7 +117,7 @@
           <div class="col-auto">
             <label class="visually-hidden" for="autoSizingInputGroup">Kwota</label>
             <div class="input-group">
-              <div class="input-group-text"><img src="./images/icons/currency-dollar.svg" alt="dollar" width="25" height="20">
+              <div class="input-group-text"><img src="/images/currency-dollar.svg" alt="dollar" width="25" height="20">
               </div>
               <span class="input-group-text">0.00</span>
               <input type="text" class="form-control" id="autoSizingInputGroup" placeholder="Wpisz kwote.." value="<?php
@@ -140,7 +140,7 @@
           <div class="col-auto">
             <label for="floatingDate"></label>
             <div class="input-group">
-              <div class="input-group-text"><img src="./images/icons/calendar3.svg" alt="calendar" width="25" height="20">
+              <div class="input-group-text"><img src="/images/calendar3.svg" alt="calendar" width="25" height="20">
               </div>
               <input type="date" class="form-control" id="floatingDate" placeholder="Data" name="date">
             </div>
@@ -149,7 +149,7 @@
           <div class="col-auto">
             <label for="floatingCategory"></label>
             <div class="input-group">
-              <div class="input-group-text"><img src="./images/icons/credit-card.svg" alt="locker" width="25" height="20">
+              <div class="input-group-text"><img src="/images/credit-card.svg" alt="locker" width="25" height="20">
               </div>
               <select class="form-select" id="floatingCategory" aria-label="Floating label select example" name="method">
                 <option value="-1" selected>Sposób płatności...</option>
@@ -172,7 +172,7 @@
           <div class="col-auto">
             <label for="floatingCategory"></label>
             <div class="input-group">
-              <div class="input-group-text"><img src="./images/icons/puzzle.svg" alt="locker" width="25" height="20">
+              <div class="input-group-text"><img src="/images/puzzle.svg" alt="locker" width="25" height="20">
               </div>
               <select class="form-select" id="floatingCategory" aria-label="Floating label select example" name="category">
                 <option value="-1" selected>Wybierz kategorię...</option>
@@ -233,32 +233,7 @@
     </div>
   </main>
 
-  <footer>
-    <div class="container mt-4 pt-4">
-      <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
-        <div class="col-md-4 d-flex align-items-center">
-          <a href="/" class="mb-3 me-2 mb-md-0 text-body-secondary text-decoration-none lh-1">
-            <img src="./images/icons/coin.svg" class="bi" width="30" height="24">
-            <use></use></img>
-          </a>
-          <span class="mb-3 mb-md-0 text-body-secondary">© 2024 Mój Budżet, Inc</span>
-        </div>
-
-        <ul class="nav col-md-4 justify-content-end list-unstyled d-flex">
-          <li class="ms-3"><a class="text-body-secondary" href="#"><img src="./images/icons/twitter-x.svg" class="bi" width="24" height="24">
-              <use xlink:href="#twitter"></use></img>
-            </a></li>
-          <li class="ms-3"><a class="text-body-secondary" href="#"><img src="./images/icons/instagram.svg" class="bi" width="24" height="24">
-              <use xlink:href="#instagram"></use></img>
-            </a></li>
-          <li class="ms-3"><a class="text-body-secondary" href="#"><img src="./images/icons/facebook.svg" class="bi" width="24" height="24">
-              <use xlink:href="#facebook"></use></img>
-            </a></li>
-        </ul>
-      </footer>
-    </div>
-  </footer>
-
+  <?php include $this->resolve("partials/_footer.php"); ?>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
   <script src="income.js" charset="utf-8"></script>
