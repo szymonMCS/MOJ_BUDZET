@@ -40,7 +40,15 @@ class ValidatorService
       'password' => ['required', 'btwpassword:8,20'],
       'confirmPassword' => ['required', 'match:password'],
       'tos' => ['required'],
-      'bot' => ['bot:6LcavzYqAAAAAA_rQh195YfD2cAw5LLHCeXaHqQo']
+      'bot' => ['bot:6LefBT8qAAAAADM9wGTLpdOV4BuraLHUCkMAvqjZ']
+    ]);
+  }
+
+  public function validateLogin(array $formData)
+  {
+    $this->validator->validate($formData, [
+      'email' => ['required', 'email'],
+      'password' => ['required', 'btwpassword:8,20']
     ]);
   }
 }

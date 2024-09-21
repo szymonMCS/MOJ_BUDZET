@@ -178,7 +178,7 @@
             <tr>
               <th scope="col">
                 <div class="d-flex flex-row align-items-center">
-                  <img class="me-3" src="./images/icons/graph-up-arrow.svg" width="27px" height="27px">
+                  <img class="me-3" src="/images/graph-up-arrow.svg" width="27px" height="27px">
                   <h4>Twoje przychody</h4>
                 </div>
               </th>
@@ -260,7 +260,7 @@
             <tr>
               <th scope="col">
                 <div class="d-flex flex-row align-items-center">
-                  <img class="me-3" src="./images/icons/graph-down-arrow.svg" width="27px" height="27px">
+                  <img class="me-3" src="/images/graph-down-arrow.svg" width="27px" height="27px">
                   <h4>Twoje wydatki</h4>
                 </div>
               </th>
@@ -350,33 +350,7 @@
     </section>
   </main>
 
-  <footer>
-    <div class="container mt-4 pt-4">
-      <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
-        <div class="col-md-4 d-flex align-items-center">
-          <a href="/" class="mb-3 me-2 mb-md-0 text-body-secondary text-decoration-none lh-1">
-            <img src="./images/icons/coin.svg" class="bi" width="30" height="24">
-            <use></use></img>
-          </a>
-          <span class="mb-3 mb-md-0 text-body-secondary">© 2024 Mój Budżet, Inc</span>
-        </div>
-
-        <ul class="nav col-md-4 justify-content-end list-unstyled d-flex">
-          <li class="ms-3"><a class="text-body-secondary" href="#"><img src="./images/icons/twitter-x.svg" class="bi" width="24" height="24">
-              <use xlink:href="#twitter"></use></img>
-            </a></li>
-          <li class="ms-3"><a class="text-body-secondary" href="#"><img src="./images/icons/instagram.svg" class="bi" width="24" height="24">
-              <use xlink:href="#instagram"></use></img>
-            </a></li>
-          <li class="ms-3"><a class="text-body-secondary" href="#"><img src="./images/icons/facebook.svg" class="bi" width="24" height="24">
-              <use xlink:href="#facebook"></use></img>
-            </a></li>
-        </ul>
-      </footer>
-    </div>
-  </footer>
-
-
+  <?php include $this->resolve("partials/_footer.php"); ?>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>

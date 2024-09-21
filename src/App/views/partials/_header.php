@@ -36,7 +36,7 @@
           </li>
           <li class="dropdown-flex">
             <img src="/images/power.svg" alt="house" width="20" height="20">
-            <a class="dropdown-item" href="logout.php">Wyloguj</a>
+            <a class="dropdown-item" href="/logout">Wyloguj</a>
           </li>
         </ul>
       </div>
