@@ -1,10 +1,3 @@
-<?php
-//	session_start();
-//	if((isset($_SESSION['loggedIn'])) && ($_SESSION['loggedIn'] == true)){
-//		header('Location: mainPage.php');
-//		exit();
-//	}
-?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -15,7 +8,7 @@
   <title><?php echo e($title); ?> - Budżet domowy</title>
 
   <link rel="icon" type="image/png" sizes="32x32" href="/images/coin.svg">
-  <link rel="stylesheet" href="welcomeStyle.css">
+  <link rel="stylesheet" href="/assets/welcomeStyle.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Castoro:ital@0;1&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">

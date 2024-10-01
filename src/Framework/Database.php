@@ -48,4 +48,9 @@ class Database
   {
     return $this->stmt->fetch();
   }
+
+  public function fetchAll()
+  {
+    return $this->stmt->fetchAll();
+  }
 }

@@ -1,67 +1,3 @@
-<?php
-/*
-	session_start();
-	
-	if((!isset($_SESSION['loggedIn']))){
-		header('Location: index.php');
-		exit();
-	}
-	
-	require_once "database.php";
-	
-	$categoryquery = $db->prepare('SELECT id, name FROM incomes_category_assigned_to_users WHERE user_id = :user_id');
-	$categoryquery->bindValue(':user_id', $_SESSION['logged_id'], PDO::PARAM_STR); 
-	$categoryquery->execute();
-	$categories = $categoryquery->fetchAll(PDO::FETCH_ASSOC);
-	
-	
-	if(isset($_POST['amount'])){
-		$everything_ok = true;
-		
-		$amount = trim($_POST['amount']);
-		$amount = str_replace(',', '.', $amount);
-		
-		$pattern = '/^\d+\.\d{2}$/';
-		if (!preg_match($pattern, $amount)) {
-			$everything_ok = false;
-			$_SESSION['e_amount'] = "podaj dokładną kwotę z dwoma miejscami po przecinku";
-		}
-		
-		$date = $_POST['date'];
-		if (strpos($date, '.') !== false) {
-			list($day, $month, $year) = explode('.', $date);
-			$date = sprintf('%04d-%02d-%02d', $year, $month, $day);
-		}
-		
-		if($_POST['category'] == "-1"){
-			$everything_ok = false;
-			$_SESSION['e_category'] = "wybierz kategoeire";
-		} else {
-			$chosencategory = $_POST['category'];
-		}
-		
-		$comment = $_POST['comment'];
-		
-		$_SESSION['fr_amount'] = $amount;
-		
-		if($everything_ok){	
-			$query = $db->prepare('INSERT INTO incomes VALUES (NULL, :user_id, :income_category_assigned_to_user_id, :amount, :date_of_income, :income_comment)');
-			$query->bindValue(':user_id', $_SESSION['logged_id'], PDO::PARAM_STR);
-			$query->bindValue(':income_category_assigned_to_user_id', $chosencategory, PDO::PARAM_STR);
-			$query->bindValue(':amount', $amount, PDO::PARAM_STR);
-			$query->bindValue(':date_of_income', $date, PDO::PARAM_STR);
-			$query->bindValue(':income_comment', $comment, PDO::PARAM_STR);
-			$query->execute();
-			
-			unset($_SESSION['e_amount']);
-			unset($_SESSION['e_date']);
-			unset($_SESSION['e_category']);
-			$_SESSION['income_added'] = true;
-		}
-	}
-*/
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -71,8 +7,8 @@
 
   <title><?php echo e($title); ?> - Budżet domowy</title>
 
-  <link rel="icon" type="image/png" sizes="32x32" href="./images/icons/coin.svg">
-  <link rel="stylesheet" href="registerStyle.css">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/icons/coin.svg">
+  <link rel="stylesheet" href="/assets/registerStyle.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Castoro:ital@0;1&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
@@ -80,7 +16,10 @@
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <style>
     .error {
-      color: red;
+      --tw-bg-opacity: 1;
+      background-color: rgb(243 244 246 / var(--tw-bg-opacity));
+      --tw-text-opacity: 1;
+      color: rgb(239 68 68 / var(--tw-text-opacity));
       margin-top: 10px;
       margin-bottom: 10px;
     }
@@ -98,27 +37,21 @@
           <h4 id="rejestracja" class="my-0 fw-normal text-center">DODAJ PRZYCHÓD</h4>
         </div>
         <form class="p-4 p-md-5 border rounded-3 .bg-light-subtle" method="post">
-
+          <?php include $this->resolve("partials/_csrf.php"); ?>
           <div class="col-auto">
             <label class="visually-hidden" for="autoSizingInputGroup">Kwota</label>
             <div class="input-group">
               <div class="input-group-text"><img src="/images/currency-dollar.svg" alt="dollar" width="25" height="20">
               </div>
-              <span class="input-group-text">0,00</span>
-              <input type="text" class="form-control" id="autoSizingInputGroup" placeholder="Wpisz kwote.." value="<?php
-                                                                                                                    if (isset($_SESSION['fr_amount'])) {
-                                                                                                                      echo $_SESSION['fr_amount'];
-                                                                                                                      unset($_SESSION['fr_amount']);
-                                                                                                                    }
-                                                                                                                    ?>" name="amount">
+              <span class="input-group-text">0.00</span>
+              <input type="text" class="form-control" id="autoSizingInputGroup" placeholder="Wpisz kwote.." value="<?php echo e($oldFormData['amount'] ?? ''); ?>" name="amount">
             </div>
 
-            <?php
-            if (isset($_SESSION['e_amount'])) {
-              echo '<div class="error">' . $_SESSION['e_amount'] . '</div>';
-              unset($_SESSION['e_amount']);
-            }
-            ?>
+            <?php if (array_key_exists('amount', $errors)) : ?>
+              <div class="error">
+                <?php echo e($errors['amount'][0]); ?>
+              </div>
+            <?php endif; ?>
 
           </div>
 
@@ -127,8 +60,14 @@
             <div class="input-group">
               <div class="input-group-text"><img src="/images/calendar3.svg" alt="calendar" width="25" height="20">
               </div>
-              <input type="date" class="form-control" id="floatingDate" placeholder="Data" name="date">
+              <input value="<?php echo e($oldFormData['date'] ?? ''); ?>" type="date" class="form-control" id="floatingDate" placeholder="Data" name="date">
             </div>
+
+            <?php if (array_key_exists('date', $errors)) : ?>
+              <div class="error">
+                <?php echo e($errors['date'][0]); ?>
+              </div>
+            <?php endif; ?>
           </div>
 
           <div class="col-auto">
@@ -139,7 +78,7 @@
               <select class="form-select" id="floatingCategory" aria-label="Floating label select example" name="category">
                 <option value="-1" selected>Wybierz kategorię...</option>
                 <?php
-                foreach ($categories as $category) {
+                foreach ($_SESSION['incomesCategories'] as $category) {
                   echo '<option value="' . $category['id'] . '">' . $category['name'] . '</option>';
                 }
                 ?>
@@ -147,27 +86,29 @@
             </div>
           </div>
 
-          <?php
-          if (isset($_SESSION['e_category'])) {
-            echo '<div class="error">' . $_SESSION['e_category'] . '</div>';
-            unset($_SESSION['e_category']);
-          }
-          ?>
+          <?php if (array_key_exists('category', $errors)) : ?>
+            <div class="error">
+              <?php echo e($errors['category'][0]); ?>
+            </div>
+          <?php endif; ?>
 
           <div class="mb-3 mt-4">
             <label for="exampleFormControlTextarea1" class="form-label">Komentarz (opcjonalnie)</label>
             <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="comment"></textarea>
           </div>
 
-
-
+          <?php if (array_key_exists('comment', $errors)) : ?>
+            <div class="error">
+              <?php echo e($errors['comment'][0]); ?>
+            </div>
+          <?php endif; ?>
 
           <div class="w-40 btn btn-lg btn-success mt-4">
             <button type="submit" class="nav-link active" aria-current="page">Dodaj
             </button>
           </div>
           <div class="w-40 btn btn-lg btn-danger mt-4">
-            <a href="incomes.php" class="nav-link active" aria-current="page">Anuluj
+            <a href="/home" class="nav-link active" aria-current="page">Anuluj
             </a>
           </div>
 
@@ -183,7 +124,7 @@
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-success" data-bs-dismiss="modal">Dodaj</button>
-                  <a href="mainPage.php" class="btn btn-danger" aria-current="page">Anuluj</a>
+                  <a href="/home" class="btn btn-danger" aria-current="page">Anuluj</a>
                 </div>
               </div>
             </div>
@@ -199,7 +140,7 @@
   <?php include $this->resolve("partials/_footer.php"); ?>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-  <script src="income.js" charset="utf-8"></script>
+  <script src="/assets/income.js" charset="utf-8"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function() {
       <?php

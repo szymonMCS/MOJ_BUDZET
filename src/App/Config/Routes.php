@@ -9,22 +9,30 @@ use App\Controllers\{
   AboutController,
   HomeController,
   BalanceController,
-  IncomeController,
-  OutcomeController,
+  TransactionController,
   AuthController
 };
-use App\Middleware\{AuthRequiredMiddleware, GuestOnlyMiddleware};
+use App\Middleware\{
+  AuthRequiredMiddleware,
+  GuestOnlyMiddleware,
+  IncomesCategoriesMiddleware,
+  OutcomesCategoriesMiddleware,
+  BalanceDateMiddleware
+};
 
 function registerRoutes(App $app)
 {
   $app->get('/', [AboutController::class, 'about']);
-  $app->get('/home', [HomeController::class, 'home'])->add(AuthRequiredMiddleware::class);
-  $app->get('/register', [AuthController::class, 'registerView'])->add(GuestOnlyMiddleware::class);
-  $app->post('/register', [AuthController::class, 'register'])->add(GuestOnlyMiddleware::class);
-  $app->get('/login', [AuthController::class, 'loginView'])->add(GuestOnlyMiddleware::class);
-  $app->post('/login', [AuthController::class, 'login'])->add(GuestOnlyMiddleware::class);
-  $app->get('/income', [IncomeController::class, 'income'])->add(AuthRequiredMiddleware::class);
-  $app->get('/outcome', [OutcomeController::class, 'outcome'])->add(AuthRequiredMiddleware::class);
-  $app->get('/balance', [BalanceController::class, 'balance'])->add(AuthRequiredMiddleware::class);
-  $app->get('/logout', [AuthController::class, 'logout'])->add(AuthRequiredMiddleware::class);
+  $app->get('/home', [HomeController::class, 'home'])->add([AuthRequiredMiddleware::class]);
+  $app->get('/register', [AuthController::class, 'registerView'])->add([GuestOnlyMiddleware::class]);
+  $app->post('/register', [AuthController::class, 'register'])->add([GuestOnlyMiddleware::class]);
+  $app->get('/login', [AuthController::class, 'loginView'])->add([GuestOnlyMiddleware::class]);
+  $app->post('/login', [AuthController::class, 'login'])->add([GuestOnlyMiddleware::class]);
+  $app->get('/income', [TransactionController::class, 'incomeView'])->add([IncomesCategoriesMiddleware::class, AuthRequiredMiddleware::class]);
+  $app->post('/income', [TransactionController::class, 'income'])->add([IncomesCategoriesMiddleware::class, AuthRequiredMiddleware::class]);
+  $app->get('/outcome', [TransactionController::class, 'outcomeView'])->add([OutcomesCategoriesMiddleware::class, AuthRequiredMiddleware::class]);
+  $app->post('/outcome', [TransactionController::class, 'outcome'])->add([OutcomesCategoriesMiddleware::class, AuthRequiredMiddleware::class]);
+  $app->get('/balance', [BalanceController::class, 'balance'])->add([BalanceDateMiddleware::class, AuthRequiredMiddleware::class]);
+  $app->post('/balance', [BalanceController::class, 'balance'])->add([BalanceDateMiddleware::class, AuthRequiredMiddleware::class]);
+  $app->get('/logout', [AuthController::class, 'logout'])->add([AuthRequiredMiddleware::class]);
 }

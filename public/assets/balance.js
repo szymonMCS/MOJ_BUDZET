@@ -1,7 +1,7 @@
 $(document).ready(function(){
 	
 	var start;
-    var end;
+  var end;
 	var savedDate = localStorage.getItem('selectedDate');
 	var firstVisit = localStorage.getItem('firstVisit');
 	var defaultName = 'Dzisiaj';
@@ -34,12 +34,13 @@ $(document).ready(function(){
     }
 	
 	function updateSelectedDate() {
-        var previousDateValue = localStorage.getItem('selectedDate');
-        dateValue = dateValue || $("#reportrange span").text();
-        if (dateValue !== previousDateValue) {
-            sendDateToServer(dateValue);
-        }
-    }
+      var previousDateValue = localStorage.getItem('selectedDate');
+      dateValue = dateValue || $("#reportrange span").text();
+      if (dateValue !== previousDateValue) {
+          sendDateToServer(dateValue);
+          submitInvisibleForm(dateValue);
+      }
+  }
 	
 	function cb(start, end) {
         $('#reportrange span').html(start.format('DD.MM.YYYY') + ' - ' + end.format('DD.MM.YYYY'));
@@ -59,7 +60,7 @@ $(document).ready(function(){
             'Poprzedni miesiąc': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
         },
         locale: {
-            format: "DD.MM.YYYYY",
+            format: "DD.MM.YYYY",
             separator: " - ",
             applyLabel: "Zatwierdź",
             cancelLabel: "Anuluj",
@@ -106,17 +107,26 @@ $(document).ready(function(){
 
 		$.ajax({
 			type: "POST",
-			url: "/mojbudzet/balance.php",
+			url: "/balance",
 			data: { dateValue: dateValue },
 			success: function(response) {
 				console.log('Odebrany tekst: ' + response);
-				location.reload();
+        setTimeout(function(){
+          location.reload();
+        }, 1000)
 			},
 			error: function(xhr, status, error) {
-				console.error('Error:', xhr.status, status, error);
+        console.error('Error status:', status);
+        console.error('Error:', error);
+        console.log('Response text:', xhr.responseText); 
 			}
 		});
 	}
+
+  function submitInvisibleForm(dateValue) {
+    document.getElementById('searchInput').value = dateValue;
+    document.getElementById('invisibleForm').submit();
+  }
 
     $(".ranges ul li").click(function() {
         var chosenOption = $(this).text();
@@ -124,7 +134,8 @@ $(document).ready(function(){
         setTimeout(updateSelectedDate, 500);
     });
 
-    $(".applyBtn.btn.btn-sm.btn-primary").click(function() {
+    $(".applyBtn.btn.btn-sm.btn-primary").click(function(e) {
+        e.preventDefault();
         name = $("#reportrange span").text();
         updateNameOfPeriod(dowolnaData);
         setTimeout(updateSelectedDate, 500);

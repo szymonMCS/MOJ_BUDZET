@@ -47,8 +47,8 @@ class App
     $this->router->addMiddleware($middleware);
   }
 
-  public function add(string $middleware)
+  public function add(array $middlewares)
   {
-    $this->router->addRouteMiddleware($middleware);
+    $this->router->addRouteMiddleware($middlewares);
   }
 }
