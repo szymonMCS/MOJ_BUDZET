@@ -1,137 +1,25 @@
-<!--<?php
-    /*
-	session_start();
+<?php
+if (!isset($_SESSION['date_range'])) {
+  $today = date('d.m.Y');
+  $_SESSION['date_range'] = "$today - $today";
+  echo 'MInitial date set to: ' . $_SESSION['date_range'];
+}
 
-	if (!isset($_SESSION['loggedIn'])) {
-		header('Location: index.php');
-		exit();
-	}
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+  if (isset($_POST['dateValue'])) {
+    echo 'MPOST data received: ' . $_POST['dateValue'];
+    $_SESSION['date_range'] = $_POST['dateValue'];
+    echo 'MSession date updated to: ' . $_SESSION['date_range'];
+  }
+}
 
-	if (!isset($_SESSION['date_range'])) {
-		$today = date('d.m.Y');
-		$_SESSION['date_range'] = "$today - $today";
-	}
+list($date2, $date1) = explode(' - ', $_SESSION['date_range']);
+error_log('Session dates parsed: date1 = ' . $date1 . ', date2 = ' . $date2);
 
-	if ($_SERVER["REQUEST_METHOD"] == "POST") {
-		if (isset($_POST['dateValue'])) {
-			$_SESSION['date_range'] = $_POST['dateValue'];
-		}
-	}
-
-    list($date2, $date1) = explode(' - ', $_SESSION['date_range']);
-
-    $date1 = DateTime::createFromFormat('d.m.Y', $date1)->format('Y-m-d');
-    $date2 = DateTime::createFromFormat('d.m.Y', $date2)->format('Y-m-d');
-
-    require_once "database.php";
-    
-    try {
-        $incomesquery = $db->prepare('SELECT
-                                        incomes.date_of_income,
-                                        incomes_category_assigned_to_users.name,
-                                        incomes.amount,
-                                        incomes.income_comment
-                                      FROM incomes
-                                        INNER JOIN users ON users.id = incomes.user_id
-                                        INNER JOIN incomes_category_assigned_to_users ON incomes_category_assigned_to_users.id = incomes.income_category_assigned_to_user_id
-                                      WHERE incomes.user_id = :user_id AND
-                                            incomes.date_of_income BETWEEN :date_begin AND :date_end');
-        $incomesquery->bindValue(':user_id', $_SESSION['logged_id'], PDO::PARAM_INT);
-        $incomesquery->bindValue(':date_begin', $date2, PDO::PARAM_STR);
-        $incomesquery->bindValue(':date_end', $date1, PDO::PARAM_STR);
-        $incomesquery->execute();
-        $incomes = $incomesquery->fetchAll(PDO::FETCH_ASSOC);
-
-        $incomesumquery = $db->prepare('SELECT
-                                            incomes_category_assigned_to_users.name,
-                                            SUM(incomes.amount) AS sum
-                                        FROM incomes
-                                            INNER JOIN users ON users.id = incomes.user_id
-                                            INNER JOIN incomes_category_assigned_to_users ON
-                                                       incomes_category_assigned_to_users.user_id = users.id AND
-                                                       incomes_category_assigned_to_users.id = incomes.income_category_assigned_to_user_id
-                                        WHERE incomes.user_id = :user_id AND
-                                              incomes.date_of_income BETWEEN :date_begin AND :date_end
-                                        GROUP BY incomes.income_category_assigned_to_user_id
-                                        ORDER BY sum DESC');
-        $incomesumquery->bindValue(':user_id', $_SESSION['logged_id'], PDO::PARAM_INT);
-        $incomesumquery->bindValue(':date_begin', $date2, PDO::PARAM_STR);
-        $incomesumquery->bindValue(':date_end', $date1, PDO::PARAM_STR);
-        $incomesumquery->execute();
-        $incomesums = $incomesumquery->fetchAll(PDO::FETCH_ASSOC);
-
-        $expensesquery = $db->prepare('SELECT
-                                        expenses.date_of_expense,
-										payment_methods_assigned_to_users.name AS payment,
-                                        expenses_category_assigned_to_users.name AS category,
-                                        expenses.amount,
-                                        expenses.expense_comment
-                                      FROM expenses
-                                        INNER JOIN users ON users.id = expenses.user_id
-                                        INNER JOIN expenses_category_assigned_to_users ON expenses_category_assigned_to_users.id = expenses.expense_category_assigned_to_user_id
-										INNER JOIN payment_methods_assigned_to_users ON payment_methods_assigned_to_users.id = expenses.payment_method_assigned_to_user_id
-                                      WHERE expenses.user_id = :user_id AND
-                                            expenses.date_of_expense BETWEEN :date_begin AND :date_end');
-        $expensesquery->bindValue(':user_id', $_SESSION['logged_id'], PDO::PARAM_INT);
-        $expensesquery->bindValue(':date_begin', $date2, PDO::PARAM_STR);
-        $expensesquery->bindValue(':date_end', $date1, PDO::PARAM_STR);
-        $expensesquery->execute();
-        $expenses = $expensesquery->fetchAll(PDO::FETCH_ASSOC);
-
-        $expensesumquery = $db->prepare('SELECT
-                                            expenses_category_assigned_to_users.name,
-                                            SUM(expenses.amount) AS sum
-                                        FROM expenses
-                                            INNER JOIN users ON users.id = expenses.user_id
-                                            INNER JOIN expenses_category_assigned_to_users ON
-                                                       expenses_category_assigned_to_users.user_id = users.id AND
-                                                       expenses_category_assigned_to_users.id = expenses.expense_category_assigned_to_user_id
-                                        WHERE expenses.user_id = :user_id AND
-                                              expenses.date_of_expense BETWEEN :date_begin AND :date_end
-                                        GROUP BY expenses.expense_category_assigned_to_user_id
-                                        ORDER BY sum DESC');
-        $expensesumquery->bindValue(':user_id', $_SESSION['logged_id'], PDO::PARAM_INT);
-        $expensesumquery->bindValue(':date_begin', $date2, PDO::PARAM_STR);
-        $expensesumquery->bindValue(':date_end', $date1, PDO::PARAM_STR);
-        $expensesumquery->execute();
-        $expensesums = $expensesumquery->fetchAll(PDO::FETCH_ASSOC);
-		
-		$incomessummary = $db->prepare('SELECT
-											SUM(incomes.amount) AS total_sum
-										FROM incomes
-										WHERE incomes.user_id = :user_id AND
-										incomes.date_of_income BETWEEN :date_begin AND :date_end
-										ORDER BY incomes.id');
-		$incomessummary->bindValue(':user_id', $_SESSION['logged_id'], PDO::PARAM_INT);
-        $incomessummary->bindValue(':date_begin', $date2, PDO::PARAM_STR);
-        $incomessummary->bindValue(':date_end', $date1, PDO::PARAM_STR);
-        $incomessummary->execute();
-			$totalSumOne = $incomessummary->fetch(PDO::FETCH_ASSOC);
-			$sumOfIncomes = $totalSumOne['total_sum'];
-
-		$exensessummary = $db->prepare('SELECT
-											SUM(expenses.amount) AS total_sum
-										FROM expenses
-										WHERE expenses.user_id = :user_id AND
-										expenses.date_of_expense BETWEEN :date_begin AND :date_end
-										ORDER BY expenses.id');
-		$exensessummary->bindValue(':user_id', $_SESSION['logged_id'], PDO::PARAM_INT);
-        $exensessummary->bindValue(':date_begin', $date2, PDO::PARAM_STR);
-        $exensessummary->bindValue(':date_end', $date1, PDO::PARAM_STR);
-        $exensessummary->execute();
-			$totalSumTwo = $exensessummary->fetch(PDO::FETCH_ASSOC);
-			$sumOfExpenses = $totalSumTwo['total_sum'];
-		
-		
-
-    } catch (PDOException $e) {
-        echo "Błąd: " . $e->getMessage();
-        error_log('PDOException: ' . $e->getMessage());
-        $error_message = "Wystąpił błąd. Proszę spróbować później.";
-    }
-*/
-    ?>-->
-
+$_SESSION['date1'] = DateTime::createFromFormat('d.m.Y', $date1)->format('Y-m-d');
+$_SESSION['date2'] = DateTime::createFromFormat('d.m.Y', $date2)->format('Y-m-d');
+error_log('Session date1: ' . $_SESSION['date1'] . ', date2: ' . $_SESSION['date2']);
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -141,8 +29,8 @@
 
   <title><?php echo e($title); ?> - Budżet domowy</title>
 
-  <link rel="icon" type="image/png" sizes="32x32" href="./images/icons/coin.svg">
-  <link rel="stylesheet" href="balance.css">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/coin.svg">
+  <link rel="stylesheet" href="/assets/balance.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Castoro:ital@0;1&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
@@ -169,6 +57,10 @@
           <span id="selectedDate"></span>
         </div>
       </div>
+      <form id="invisibleForm" method="GET" style="display:none;">
+        <input value="<?php echo e((string) $dateToTransfer); ?>" type="text" name="s" id="searchInput" />
+      </form>
+
     </section>
 
     <section>
@@ -358,7 +250,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-daterangepicker/3.0.5/daterangepicker.min.js" integrity="sha512-mh+AjlD3nxImTUGisMpHXW03gE6F4WdQyvuFRkjecwuWLwD2yCijw4tKA3NsEFpA1C3neiKhGXPSIGSfCYPMlQ==" crossorigin="anonymous"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/css/bootstrap.min.css" integrity="sha512-P5MgMn1jBN01asBgU0z60Qk4QxiXo86+wlFahKrsQf37c9cro517WzVSPPV1tDKzhku2iJ2FVgL67wG03SGnNA==" crossorigin="anonymous" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-daterangepicker/3.0.5/daterangepicker.min.css" integrity="sha512-rBi1cGvEdd3NmSAQhPWId5Nd6QxE8To4ADjM2a6n0BrqQdisZ/RPUlm0YycDzvNL1HHAh1nKZqI0kSbif+5upQ==" crossorigin="anonymous" />
-  <script src="balance.js" charset="utf-8"></script>
+  <script src="/assets/balance.js" charset="utf-8"></script>
 </body>
 
 </html>

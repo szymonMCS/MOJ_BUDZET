@@ -11,7 +11,7 @@ class OutcomeController
 {
   public function __construct(private TemplateEngine $view) {}
 
-  public function outcome()
+  public function outcomeView()
   {
     echo $this->view->render("outcomes.php");
   }

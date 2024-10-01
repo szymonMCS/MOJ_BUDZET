@@ -71,9 +71,11 @@ class Router
     $this->middlewares[] = $middleware;
   }
 
-  public function addRouteMiddleware(string $middleware)
+  public function addRouteMiddleware(array $middlewares)
   {
     $lastRouteKey = array_key_last($this->routes); // Pobranie klucza ostatniej dodanej trasy
-    $this->routes[$lastRouteKey]['middlewares'][] = $middleware; // Dodanie middleware do tej trasy
+    foreach ($middlewares as $middleware) {
+      $this->routes[$lastRouteKey]['middlewares'][] = $middleware; // Dodanie middleware do tej trasy
+    }
   }
 }

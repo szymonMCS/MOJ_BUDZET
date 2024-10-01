@@ -11,7 +11,7 @@ class IncomeController
 {
   public function __construct(private TemplateEngine $view) {}
 
-  public function income()
+  public function incomeView()
   {
     echo $this->view->render("incomes.php");
   }
