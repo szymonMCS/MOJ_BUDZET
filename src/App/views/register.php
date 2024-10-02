@@ -51,7 +51,7 @@
           <h4 id="rejestracja" class="my-0 fw-normal text-center">REJESTRACJA</h4>
         </div>
         <form class="p-4 p-md-5 border rounded-3 .bg-light-subtle" method="post">
-          <?php include $this->resolve('partial/_csrd.php'); ?>
+          <?php include $this->resolve('partials/_csrf.php'); ?>
           <div class="form-floating mb-3">
             <input type="text" class="form-control" id="floatingInput" placeholder="Imie" value="<?php echo e($oldFormData['username'] ?? ''); ?>" name="username" />
             <label for="floatingInput"><img src="/images/person.svg" class="me-3" alt="minus icon" width="25" height="20">Imie</label>
@@ -110,7 +110,7 @@
             </div>
           <?php endif; ?>
 
-          <div class="g-recaptcha" data-sitekey="6LefBT8qAAAAAPWE6aPWX_SFl9L_d4YIducHCfq4"></div>
+          <div class="g-recaptcha" data-sitekey="6Lc3uQcqAAAAABrAcdQ6NpN4_UOuXDkEslgJhTlc"></div>
           </br>
 
           <?php if (array_key_exists('bot', $errors)) : ?>

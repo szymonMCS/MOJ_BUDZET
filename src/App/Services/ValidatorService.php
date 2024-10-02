@@ -46,7 +46,7 @@ class ValidatorService
       'password' => ['required', 'btwpassword:8,20'],
       'confirmPassword' => ['required', 'match:password'],
       'tos' => ['required'],
-      'bot' => ['bot:6LefBT8qAAAAADM9wGTLpdOV4BuraLHUCkMAvqjZ']
+      'bot' => ['bot:6Lc3uQcqAAAAANhhWprLaN6JeI9wwThVgKGh-UmK']
     ]);
   }
 
