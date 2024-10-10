@@ -24,12 +24,8 @@
         </a>
         <ul class="dropdown-menu text-small shadow" style="position: absolute; inset: 0px 0px auto auto; margin: 0px; transform: translate3d(0.5px, 34px, 0px);" data-popper-placement="bottom-end">
           <li class="dropdown-flex">
-            <img src="/images/person-lines-fill.svg" alt="profile" width="20" height="20">
-            <a class="dropdown-item" href="#">Profil</a>
-          </li>
-          <li class="dropdown-flex">
             <img src="/images/trybik.png" alt="gear" width="20" height="20">
-            <a class="dropdown-item" href="#">Ustawienia</a>
+            <a class="dropdown-item" href="/settings">Ustawienia</a>
           </li>
           <li>
             <hr class="dropdown-divider">
