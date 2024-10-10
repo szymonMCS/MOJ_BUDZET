@@ -87,6 +87,7 @@ class UserService
       [
         'email' => $formData['email']
       ]
+
     )->fetch();
 
     $passwordsMatch = password_verify(
@@ -102,6 +103,7 @@ class UserService
 
     $_SESSION['logged_id'] = $user['id'];
     $_SESSION['username'] = $user['username'];
+    $_SESSION['email'] = $formData['email'];
   }
 
   public function logout()
@@ -119,4 +121,18 @@ class UserService
       $params['httponly']
     );
   }
+
+  // public function updateProfile(array $formData)
+  // {
+  //   $this->db->query(
+  //     'UPDATE users SET username = :username, email = :email WHERE id = :id',
+  //     [
+  //       'username' => $formData['username'],
+  //       'email' => $formData['email'],
+  //       'id' => $_SESSION['logged_id']
+  //     ]
+  //   );
+
+  //   $_SESSION['success_profileUpdate'] = true;
+  // }
 }

@@ -11,7 +11,8 @@ use App\Controllers\{
   BalanceController,
   TransactionController,
   AuthController,
-  ErrorController
+  ErrorController,
+  SettingsController
 };
 use App\Middleware\{
   AuthRequiredMiddleware,
@@ -36,7 +37,8 @@ function registerRoutes(App $app)
   $app->get('/balance', [BalanceController::class, 'balance'])->add([BalanceDateMiddleware::class, AuthRequiredMiddleware::class]);
   $app->post('/balance', [BalanceController::class, 'balance'])->add([BalanceDateMiddleware::class, AuthRequiredMiddleware::class]);
   $app->get('/logout', [AuthController::class, 'logout'])->add([AuthRequiredMiddleware::class]);
-
+  $app->get('/settings', [SettingsController::class, 'settingsView'])->add([AuthRequiredMiddleware::class]);
+  $app->post('/settings', [SettingsController::class, 'profileEdit'])->add([AuthRequiredMiddleware::class]);
 
   $app->setErrorHandler([ErrorController::class, 'notFound']);
 }

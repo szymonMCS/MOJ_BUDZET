@@ -78,4 +78,12 @@ class ValidatorService
       'comment' => ['lengthMax:50']
     ]);
   }
+
+  // public function validateProfileEdit(array $formData)
+  // {
+  //   $this->validator->validate($formData, [
+  //     'username' => ['required', 'btwname:3,20', 'name'],
+  //     'email' => ['required', 'email'],
+  //   ]);
+  // }
 }
