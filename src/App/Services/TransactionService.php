@@ -230,4 +230,27 @@ class TransactionService
 
     return $sumOfExpenses;
   }
+
+  public function addCategory(array $formData)
+  {
+    if ($formData['newCategoryType'] === 'przychody') {
+
+      $this->db->query(
+        'INSERT INTO incomes_category_assigned_to_users VALUES (NULL, :user_id, :name)',
+        [
+          'user_id' => $_SESSION['logged_id'],
+          'name' => $formData['newCategoryName']
+        ]
+      );
+    } else if ($formData['newCategoryType'] === 'wydatki') {
+      $this->db->query(
+        'INSERT INTO expenses_category_assigned_to_users VALUES (NULL, :user_id, :name)',
+        [
+          'user_id' => $_SESSION['logged_id'],
+          'name' => $formData['newCategoryName']
+        ]
+      );
+    }
+    $_SESSION['category_added'] = true;
+  }
 }

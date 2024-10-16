@@ -107,4 +107,12 @@ class ValidatorService
       'passNew2' => ['required', 'match:passNew1']
     ]);
   }
+
+  public function validateAddCategory(array $formData)
+  {
+    $this->validator->validate($formData, [
+      'newCategoryType' => ['required', 'in'],
+      'newCategoryName' => ['required', 'btwname:3,20']
+    ]);
+  }
 }

@@ -111,7 +111,7 @@
 
                         <div class="modal-footer">
                           <div>
-                            <a href="/" class="btn btn-success" aria-current="page">Wróć</a>
+                            <a href="" class="btn btn-success" aria-current="page">Wróć</a>
                           </div>
                         </div>
                       </div>
@@ -171,19 +171,23 @@
                     <?php endif; ?>
                     <hr>
                     <input type="password" class="form-control mt-1" name="passNew1" placeholder="Nowe hasło">
+
                     <?php if (array_key_exists('passNew1', $errors)) : ?>
                       <div class="error">
                         <?php echo e($errors['passNew1'][0]); ?>
                       </div>
                     <?php endif; ?>
+
                     <hr>
                     <input type="password" class="form-control mt-1" name="passNew2" placeholder="Potwierdź nowe hasło">
+
+                    <?php if (array_key_exists('passNew2', $errors)) : ?>
+                      <div class="error">
+                        <?php echo e($errors['passNew2'][0]); ?>
+                      </div>
+                    <?php endif; ?>
+
                   </div>
-                  <?php if (array_key_exists('passNew2', $errors)) : ?>
-                    <div class="error">
-                      <?php echo e($errors['passNew2'][0]); ?>
-                    </div>
-                  <?php endif; ?>
                   <hr>
 
                   <button name="submitChangePasswordForm" type="submit" class="btn btn-primary" aria-current="page">Zaaktualizuj hasło</button>
@@ -198,7 +202,7 @@
 
                         <div class="modal-footer">
                           <div>
-                            <a href="/" class="btn btn-success" aria-current="page">Wróć</a>
+                            <a href="/settings" class="btn btn-success" aria-current="page">Wróć</a>
                           </div>
                         </div>
                       </div>
@@ -216,15 +220,47 @@
                   <?php include $this->resolve("partials/_csrf.php"); ?>
                   <div class="form-group">
                     <label class="d-block">Wybierz typ</label>
-                    <select class="form-select" id="floatingCategory" aria-label="Floating label select example" name="category">
-                      <option selected="">Choose...</option>
-                      <option>...</option>
+                    <select class="form-select" id="floatingCategory" aria-label="Floating label select example" name="newCategoryType">
+                      <option value="-1" selected>Wybierz typ...</option>
+                      <option>przychody</option>
+                      <option>wydatki</option>
                     </select>
+
+                    <?php if (array_key_exists('newCategoryType', $errors)) : ?>
+                      <div class="error">
+                        <?php echo e($errors['newCategoryType'][0]); ?>
+                      </div>
+                    <?php endif; ?>
+
                     <hr>
                     <label class="d-block">Wpisz nazwe</label>
-                    <input type="text" class="form-control mt-1" placeholder="Wpisz nazwe nowej kategorii">
+                    <input type="text" class="form-control mt-1" placeholder="Wpisz nazwe nowej kategorii" name="newCategoryName">
+
+                    <?php if (array_key_exists('newCategoryName', $errors)) : ?>
+                      <div class="error">
+                        <?php echo e($errors['newCategoryName'][0]); ?>
+                      </div>
+                    <?php endif; ?>
+
                   </div>
                   <button name="submitAddCategoryForm" class="btn btn-info" type="submit" aria-current="page">Dodaj</button>
+
+                  <div class="modal fade" id="addCategoryModal" tabindex="-1" aria-labelledby="addCategoryModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h1 class="modal-title fs-5" id="addCategoryLabel">Kategoria dodana pomyślnie</h1>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+
+                        <div class="modal-footer">
+                          <div>
+                            <a href="" class="btn btn-success" aria-current="page">Wróć</a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </form>
                 <hr>
 
@@ -235,8 +271,9 @@
                   <div class="form-group">
                     <label class="d-block">Wybierz typ</label>
                     <select class="form-select" id="floatingCategory" aria-label="Floating label select example" name="category">
-                      <option selected="">Choose...</option>
-                      <option>...</option>
+                      <option value="-1" selected>Wybierz typ...</option>
+                      <option>przychody</option>
+                      <option>wydatki</option>
                     </select>
                     <hr>
                     <label class="d-block">Wybierz kategorię</label>
@@ -246,6 +283,23 @@
                     </select>
                   </div>
                   <button name="submitRemoveCategoryForm" class="btn btn-danger" type="submit" aria-current="page">Usuń kategorię</button>
+
+                  <div class="modal fade" id="removeCategoryModal" tabindex="-1" aria-labelledby="removeCategoryModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h1 class="modal-title fs-5" id="removeCategoryLabel">Kategoria usunięta pomyślnie</h1>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+
+                        <div class="modal-footer">
+                          <div>
+                            <a href="" class="btn btn-success" aria-current="page">Wróć</a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </form>
               </div>
 
@@ -270,6 +324,16 @@
       <?php if (isset($_SESSION['success_passwordUpdate']) && $_SESSION['success_passwordUpdate']): ?>
         <?php $_SESSION['success_passwordUpdate'] = false; ?>
         showSuccessModal('passwordModal');
+      <?php endif; ?>
+
+      <?php if (isset($_SESSION['category_added']) && $_SESSION['category_added']): ?>
+        <?php $_SESSION['category_added'] = false; ?>
+        showSuccessModal('addCategoryModal');
+      <?php endif; ?>
+
+      <?php if (isset($_SESSION['category_removed']) && $_SESSION['category_removed']): ?>
+        <?php $_SESSION['category_removed'] = false; ?>
+        showSuccessModal('removedCategoryModal');
       <?php endif; ?>
 
       function showSuccessModal(modalId) {

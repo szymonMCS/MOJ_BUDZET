@@ -5,14 +5,15 @@ declare(strict_types=1);
 namespace App\Controllers;
 
 use Framework\TemplateEngine;
-use App\Services\{ValidatorService, UserService};
+use App\Services\{ValidatorService, UserService, TransactionService};
 
 class SettingsController
 {
   public function __construct(
     private TemplateEngine $view,
     private ValidatorService $validatorService,
-    private UserService $userService
+    private UserService $userService,
+    private TransactionService $transactionService
   ) {}
 
   public function settingsView()
@@ -36,6 +37,8 @@ class SettingsController
       $this->userService->updatePassword($_POST);
     }
     if (isset($_POST['submitAddCategoryForm'])) {
+      $this->validatorService->validateAddCategory($_POST);
+      $this->transactionService->addCategory($_POST);
     }
     if (isset($_POST['submitRemoveCategoryForm'])) {
     }
