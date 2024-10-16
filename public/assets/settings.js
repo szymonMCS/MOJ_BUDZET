@@ -1,7 +1,11 @@
 document.addEventListener('DOMContentLoaded', function () {
   const lastActiveTab = localStorage.getItem('activeTab');
-  
-  if (lastActiveTab) {
+
+  if (lastActiveTab && !lastActiveTab.startsWith('#')) {
+    localStorage.removeItem('activeTab');
+  }
+
+  if (lastActiveTab && lastActiveTab.startsWith('#')) {
       document.querySelectorAll('.nav-link').forEach(function (tab) {
           tab.classList.remove('active');
       });
@@ -20,7 +24,9 @@ document.addEventListener('DOMContentLoaded', function () {
       tab.addEventListener('click', function () {
           const targetPane = this.getAttribute('href');
 
-          localStorage.setItem('activeTab', targetPane);
+          if (targetPane.startsWith('#')) {
+              localStorage.setItem('activeTab', targetPane);
+          }
       });
   });
 });

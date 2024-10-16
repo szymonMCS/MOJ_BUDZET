@@ -20,12 +20,25 @@ class SettingsController
     echo $this->view->render("settings.php");
   }
 
-  //public function profileEdit()
-  //{
-  //$this->validatorService->validateProfileEdit($_POST);
-
-  //$this->userService->updateProfile($_POST);
-
-  //  redirectTo('/settings');
-  //}
+  public function profileEdit()
+  {
+    if (isset($_POST['submitChangeProfileForm'])) {
+      $this->validatorService->validateProfileEdit($_POST);
+      $this->userService->updateProfile($_POST);
+    }
+    if (isset($_POST['submitDeleteAccountForm'])) {
+      $this->userService->deleteProfile();
+      $this->userService->logout();
+      redirectTo('/');
+    }
+    if (isset($_POST['submitChangePasswordForm'])) {
+      $this->validatorService->validatePasswordChange($_POST);
+      $this->userService->updatePassword($_POST);
+    }
+    if (isset($_POST['submitAddCategoryForm'])) {
+    }
+    if (isset($_POST['submitRemoveCategoryForm'])) {
+    }
+    redirectTo('/settings');
+  }
 }

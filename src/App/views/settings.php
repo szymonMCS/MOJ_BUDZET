@@ -86,9 +86,10 @@
               <div class="tab-pane active" id="profile">
                 <h6>INFORMACJE O PROFILU</h6>
                 <hr>
-                <form method="post">
+                <form method="post" name="changeProfileForm">
+                  <?php include $this->resolve("partials/_csrf.php"); ?>
                   <div class="form-group">
-                    <label for="fullName">Imie</label>
+                    <label for="username">Imie</label>
                     <input type="text" class="form-control" id="floatingInput" value="<?php echo e($_SESSION['username']); ?>" name="username" />
                   </div>
 
@@ -98,31 +99,19 @@
                     </div>
                   <?php endif; ?>
 
-                  <div class="form-group">
-                    <label for="bio">E-mail</label>
-                    <input type="text" class="form-control" id="floatingInput" value="<?php echo e($_SESSION['email']); ?>" name="email" />
-                  </div>
+                  <button name="submitChangeProfileForm" class="btn btn-primary" type="submit" aria-current="page">Zaaktualizuj dane</button>
 
-                  <?php if (array_key_exists('email', $errors)) : ?>
-                    <div class="error">
-                      <?php echo e($errors['email'][0]); ?>
-                    </div>
-                  <?php endif; ?>
-
-                  <button type="submit" class="btn btn-primary" aria-current="page">Zaaktualizuj dane</button>
-
-
-                  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                  <div class="modal fade" id="usernameModal" tabindex="-1" aria-labelledby="usernameModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered">
                       <div class="modal-content">
                         <div class="modal-header">
-                          <h1 class="modal-title fs-5" id="exampleModalLabel">Dane zmienione pomyślnie</h1>
+                          <h1 class="modal-title fs-5" id="usernameModalLabel">Dane zmienione pomyślnie</h1>
                           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
 
                         <div class="modal-footer">
-                          <div class="btn btn-danger">
-                            <a href="/" class="nav-link active" aria-current="page">Wróć</a>
+                          <div>
+                            <a href="/" class="btn btn-success" aria-current="page">Wróć</a>
                           </div>
                         </div>
                       </div>
@@ -131,38 +120,100 @@
 
                 </form>
               </div>
+
               <div class="tab-pane" id="account">
                 <h6>USUŃ KONTO</h6>
                 <hr>
-                <form method="post">
+                <form method="post" name="deleteAccountForm">
+                  <?php include $this->resolve("partials/_csrf.php"); ?>
                   <div class="form-group">
                     <label class="d-block text-danger">Usuń konto</label>
                     <p class="text-muted font-size-sm">W momencie usunięcia konta, nie ma możliwości odwrotu. Uważaj!</p>
                   </div>
-                  <button class="btn btn-danger" type="submit">Usuń konto</button>
+                  <button id="openDeleteModal" class="btn btn-danger" type="button" aria-current="page">Usuń konto</button>
+
+                  <div class="modal fade" id="delAccountModal" tabindex="-1" aria-labelledby="delAccountModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h1 class="modal-title fs-5" id="delAccountModalLabel">Na pewno chcesz usunąć konto?</h1>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+
+                        <div class="modal-footer">
+                          <div>
+                            <button name="submitDeleteAccountForm" type="submit" class="btn btn-danger" data-bs-dismiss="modal">Usuń</button>
+                          </div>
+                          <div>
+                            <a href="/home" class="btn btn-success" aria-current="page">Anuluj</a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
                 </form>
               </div>
+
               <div class="tab-pane" id="security">
                 <h6>ZMIEŃ HASŁO</h6>
                 <hr>
-                <form>
+                <form method="post" name="changePasswordForm">
+                  <?php include $this->resolve("partials/_csrf.php"); ?>
                   <div class="form-group">
                     <label class="d-block">Zmień hasło</label>
-                    <input type="text" class="form-control" placeholder="Wprowadź obecne hasło">
+                    <input type="password" class="form-control" name="passOld" placeholder="Wprowadź obecne hasło">
+
+                    <?php if (array_key_exists('passOld', $errors)) : ?>
+                      <div class="error">
+                        <?php echo e($errors['passOld'][0]); ?>
+                      </div>
+                    <?php endif; ?>
                     <hr>
-                    <input type="text" class="form-control mt-1" placeholder="Nowe hasło">
+                    <input type="password" class="form-control mt-1" name="passNew1" placeholder="Nowe hasło">
+                    <?php if (array_key_exists('passNew1', $errors)) : ?>
+                      <div class="error">
+                        <?php echo e($errors['passNew1'][0]); ?>
+                      </div>
+                    <?php endif; ?>
                     <hr>
-                    <input type="text" class="form-control mt-1" placeholder="Potwierdź nowe hasło">
+                    <input type="password" class="form-control mt-1" name="passNew2" placeholder="Potwierdź nowe hasło">
                   </div>
+                  <?php if (array_key_exists('passNew2', $errors)) : ?>
+                    <div class="error">
+                      <?php echo e($errors['passNew2'][0]); ?>
+                    </div>
+                  <?php endif; ?>
                   <hr>
-                  <button type="button" class="btn btn-primary">Zaaktualizuj hasło</button>
+
+                  <button name="submitChangePasswordForm" type="submit" class="btn btn-primary" aria-current="page">Zaaktualizuj hasło</button>
+
+                  <div class="modal fade" id="passwordModal" tabindex="-1" aria-labelledby="passwordModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h1 class="modal-title fs-5" id="passwordModalLabel">Hasło zmienione pomyślnie</h1>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+
+                        <div class="modal-footer">
+                          <div>
+                            <a href="/" class="btn btn-success" aria-current="page">Wróć</a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
                 </form>
                 <hr>
               </div>
+
               <div class="tab-pane" id="billing">
                 <h6>DODAJ KATEGORIE</h6>
                 <hr>
-                <form>
+                <form method="post" name="addCategoryForm">
+                  <?php include $this->resolve("partials/_csrf.php"); ?>
                   <div class="form-group">
                     <label class="d-block">Wybierz typ</label>
                     <select class="form-select" id="floatingCategory" aria-label="Floating label select example" name="category">
@@ -173,13 +224,14 @@
                     <label class="d-block">Wpisz nazwe</label>
                     <input type="text" class="form-control mt-1" placeholder="Wpisz nazwe nowej kategorii">
                   </div>
-                  <button type="button" class="btn btn-info">Dodaj</button>
+                  <button name="submitAddCategoryForm" class="btn btn-info" type="submit" aria-current="page">Dodaj</button>
                 </form>
                 <hr>
 
                 <h6>USUŃ KATEGORIE</h6>
                 <hr>
-                <form>
+                <form method="post" name="removeCategoryForm">
+                  <?php include $this->resolve("partials/_csrf.php"); ?>
                   <div class="form-group">
                     <label class="d-block">Wybierz typ</label>
                     <select class="form-select" id="floatingCategory" aria-label="Floating label select example" name="category">
@@ -193,46 +245,45 @@
                       <option>...</option>
                     </select>
                   </div>
-                  <button class="btn btn-danger" type="button">Usuń kategorię</button>
+                  <button name="submitRemoveCategoryForm" class="btn btn-danger" type="submit" aria-current="page">Usuń kategorię</button>
                 </form>
               </div>
+
             </div>
           </div>
         </div>
       </div>
     </div>
-
-
-
-
-
-
-
-
-
-
   </main>
 
   <?php include $this->resolve("partials/_footer.php"); ?>
   <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
-  <script src="/assets/settings.js" charset="utf-8"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function() {
-      <?php
-      if (isset($_SESSION['success_profileUpdate']) && $_SESSION['success_profileUpdate']) {
-        $_SESSION['success_profileUpdate'] = false;
-      ?>
-        showSuccessModal();
-      <?php } ?>
+      <?php if (isset($_SESSION['success_profileUpdate']) && $_SESSION['success_profileUpdate']): ?>
+        <?php $_SESSION['success_profileUpdate'] = false; ?>
+        showSuccessModal('usernameModal');
+      <?php endif; ?>
 
-      function showSuccessModal() {
-        var myModal = new bootstrap.Modal(document.getElementById('exampleModal'));
+      <?php if (isset($_SESSION['success_passwordUpdate']) && $_SESSION['success_passwordUpdate']): ?>
+        <?php $_SESSION['success_passwordUpdate'] = false; ?>
+        showSuccessModal('passwordModal');
+      <?php endif; ?>
+
+      function showSuccessModal(modalId) {
+        var myModal = new bootstrap.Modal(document.getElementById(modalId));
         myModal.show();
       }
     });
+
+    document.getElementById('openDeleteModal').addEventListener('click', function() {
+      var myModal = new bootstrap.Modal(document.getElementById('delAccountModal'));
+      myModal.show();
+    });
   </script>
+  <script src="/assets/settings.js" charset="utf-8"></script>
 </body>
 
 </html>
