@@ -122,17 +122,72 @@ class UserService
     );
   }
 
-  // public function updateProfile(array $formData)
-  // {
-  //   $this->db->query(
-  //     'UPDATE users SET username = :username, email = :email WHERE id = :id',
-  //     [
-  //       'username' => $formData['username'],
-  //       'email' => $formData['email'],
-  //       'id' => $_SESSION['logged_id']
-  //     ]
-  //   );
+  public function updateProfile(array $formData)
+  {
+    $this->db->query(
+      'UPDATE users SET username = :username WHERE id = :id',
+      [
+        'username' => $formData['username'],
+        'id' => $_SESSION['logged_id']
+      ]
+    );
 
-  //   $_SESSION['success_profileUpdate'] = true;
-  // }
+    $_SESSION['username'] = $formData['username'];
+    $_SESSION['success_profileUpdate'] = true;
+  }
+
+  public function deleteProfile()
+  {
+    $this->db->query(
+      'DELETE FROM expenses WHERE user_id = :id',
+      [
+        'id' => $_SESSION['logged_id']
+      ]
+    );
+    $this->db->query(
+      'DELETE FROM expenses_category_assigned_to_users WHERE user_id = :id',
+      [
+        'id' => $_SESSION['logged_id']
+      ]
+    );
+    $this->db->query(
+      'DELETE FROM incomes WHERE user_id = :id',
+      [
+        'id' => $_SESSION['logged_id']
+      ]
+    );
+    $this->db->query(
+      'DELETE FROM incomes_category_assigned_to_users WHERE user_id = :id',
+      [
+        'id' => $_SESSION['logged_id']
+      ]
+    );
+    $this->db->query(
+      'DELETE FROM payment_methods_assigned_to_users WHERE user_id = :id',
+      [
+        'id' => $_SESSION['logged_id']
+      ]
+    );
+    $this->db->query(
+      'DELETE FROM users WHERE id = :id',
+      [
+        'id' => $_SESSION['logged_id']
+      ]
+    );
+  }
+
+  public function updatePassword(array $formData)
+  {
+    $password_hash = password_hash($formData['passNew1'], PASSWORD_DEFAULT);
+
+    $this->db->query(
+      'UPDATE users SET password = :password WHERE id = :id',
+      [
+        'password' => $password_hash,
+        'id' => $_SESSION['logged_id']
+      ]
+    );
+
+    $_SESSION['success_passwordUpdate'] = true;
+  }
 }

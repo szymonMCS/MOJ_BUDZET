@@ -15,14 +15,16 @@ use Framework\Rules\{
   CaptchaRule,
   InRule,
   LengthMaxRule,
-  NumericRule
+  NumericRule,
+  CorrectPassRule
 };
+use Framework\Database;
 
 class ValidatorService
 {
   private Validator $validator;
 
-  public function __construct()
+  public function __construct(private Database $db)
   {
     $this->validator = new Validator();
 
@@ -36,6 +38,7 @@ class ValidatorService
     $this->validator->add('in', new InRule());
     $this->validator->add('lengthMax', new LengthMaxRule());
     $this->validator->add('isNumeric', new NumericRule());
+    $this->validator->add('passok', new CorrectPassRule());
   }
 
   public function validateRegister(array $formData)
@@ -79,11 +82,29 @@ class ValidatorService
     ]);
   }
 
-  // public function validateProfileEdit(array $formData)
-  // {
-  //   $this->validator->validate($formData, [
-  //     'username' => ['required', 'btwname:3,20', 'name'],
-  //     'email' => ['required', 'email'],
-  //   ]);
-  // }
+  public function validateProfileEdit(array $formData)
+  {
+    $this->validator->validate($formData, [
+      'username' => ['required', 'name', 'btwname:3,20']
+    ]);
+  }
+
+  public function validatePasswordChange(array $formData)
+  {
+    $user = $this->db->query(
+      'SELECT password FROM users WHERE id = :id',
+      [
+        'id' => $_SESSION['logged_id']
+      ]
+    )->fetch();
+
+    $passwordCurrent = $user['password'];
+
+
+    $this->validator->validate($formData, [
+      'passOld' => ['required', 'passok:' . $passwordCurrent . ''],
+      'passNew1' => ['required', 'btwpassword:8,20'],
+      'passNew2' => ['required', 'match:passNew1']
+    ]);
+  }
 }
