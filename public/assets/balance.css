@@ -11,14 +11,14 @@ p{
 }
 
 h1, h2, h3, h4{
-  font-family: "Castoro", serif !important;\font-family: "Castoro", serif !important;
+  font-family: "Castoro", serif !important;
   font-optical-sizing: auto;
   font-style: normal;
   margin-bottom: 0 !important;
 }
 
 .table-sm td, .table-sm th{
-	padding: .5 rem !important;
+	padding: .5rem !important;
 }
 
 th, td{
@@ -40,11 +40,7 @@ table {
     border-collapse: collapse;
 }
 
-th, td {
-    border: 1px solid #000;
-    padding: 8px;
-    text-align: left;
-}
+
 
 .resizable-column {
     min-width: 100px; /* Minimalna szerokość */
@@ -90,6 +86,8 @@ th, td {
   display: flex;
 }
 
+
+
 h1 span {
   font-size: 28px;
   font-weight: 500;
@@ -115,6 +113,10 @@ h1 span {
   justify-content: flex-start;
   align-items: center;
   margin-left: 10px;
+}
+
+.slight-edge{
+  border-bottom: 1px solid lightgray;
 }
 
 th{

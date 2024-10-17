@@ -253,4 +253,28 @@ class TransactionService
     }
     $_SESSION['category_added'] = true;
   }
+
+  public function removeCategory(array $formData)
+  {
+    $selectedCategoryId = (int) $formData['removeCategoryName'];
+
+    if ($formData['removeCategoryType'] === 'przychody') {
+
+      $this->db->query(
+        'DELETE FROM incomes_category_assigned_to_users WHERE id = :id',
+        [
+          'id' => $selectedCategoryId
+        ]
+      );
+    } else if ($formData['removeCategoryType'] === 'wydatki') {
+
+      $this->db->query(
+        'DELETE FROM expenses_category_assigned_to_users WHERE id = :id',
+        [
+          'id' => $selectedCategoryId
+        ]
+      );
+    }
+    $_SESSION['category_removed'] = true;
+  }
 }

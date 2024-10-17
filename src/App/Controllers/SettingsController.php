@@ -41,6 +41,8 @@ class SettingsController
       $this->transactionService->addCategory($_POST);
     }
     if (isset($_POST['submitRemoveCategoryForm'])) {
+      $this->validatorService->validateRemoveCategory($_POST);
+      $this->transactionService->removeCategory($_POST);
     }
     redirectTo('/settings');
   }

@@ -115,4 +115,12 @@ class ValidatorService
       'newCategoryName' => ['required', 'btwname:3,20']
     ]);
   }
+
+  public function validateRemoveCategory(array $formData)
+  {
+    $this->validator->validate($formData, [
+      'removeCategoryType' => ['required', 'in'],
+      'removeCategoryName' => ['required', 'in']
+    ]);
+  }
 }
