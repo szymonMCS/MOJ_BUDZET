@@ -104,6 +104,7 @@ class UserService
     $_SESSION['logged_id'] = $user['id'];
     $_SESSION['username'] = $user['username'];
     $_SESSION['email'] = $formData['email'];
+    $_SESSION['choosenCategories'] = [];
   }
 
   public function logout()

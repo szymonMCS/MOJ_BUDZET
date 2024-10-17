@@ -52,7 +52,7 @@
 
             <tbody class="table-group-divider">
               <?php foreach ($incomes as $income): ?>
-                <tr>
+                <tr class="slight-edge">
                   <td><?php echo $income['date_of_income']; ?></td>
                   <td><?php echo $income['name']; ?></td>
                   <td scope="col">
@@ -72,7 +72,7 @@
 
             <tbody class="table-group-divider">
               <?php foreach ($incomesums as $incomesum): ?>
-                <tr>
+                <tr class="slight-edge">
                   <td></td>
                   <td><?php echo $incomesum['name']; ?></td>
                   <td scope="col">
@@ -135,7 +135,7 @@
 
             <tbody class="table-group-divider">
               <?php foreach ($expenses as $expense): ?>
-                <tr>
+                <tr class="slight-edge">
                   <td><?php echo $expense['date_of_expense']; ?></td>
                   <td><?php echo $expense['payment']; ?></td>
                   <td><?php echo $expense['category']; ?></td>
@@ -157,7 +157,7 @@
 
             <tbody class="table-group-divider">
               <?php foreach ($expensesums as $expensesum): ?>
-                <tr>
+                <tr class="slight-edge">
                   <td></td>
                   <td><?php echo $expensesum['name']; ?></td>
                   <td scope="col">

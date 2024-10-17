@@ -1,3 +1,7 @@
+<?php
+$incomesCategories = json_encode($_SESSION['incomesCategories']);
+$outcomesCategories = json_encode($_SESSION['outcomesCategories']);
+?>
 <?php include $this->resolve("partials/_head.php"); ?>
 <link rel="stylesheet" href="/assets/settings.css">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -270,17 +274,30 @@
                   <?php include $this->resolve("partials/_csrf.php"); ?>
                   <div class="form-group">
                     <label class="d-block">Wybierz typ</label>
-                    <select class="form-select" id="floatingCategory" aria-label="Floating label select example" name="category">
+                    <select class="form-select" id="removeCategoryType" name="removeCategoryType">
                       <option value="-1" selected>Wybierz typ...</option>
-                      <option>przychody</option>
-                      <option>wydatki</option>
+                      <option value="przychody">przychody</option>
+                      <option value="wydatki">wydatki</option>
                     </select>
+
+                    <?php if (array_key_exists('removeCategoryType', $errors)) : ?>
+                      <div class="error">
+                        <?php echo e($errors['removeCategoryType'][0]); ?>
+                      </div>
+                    <?php endif; ?>
+
                     <hr>
                     <label class="d-block">Wybierz kategorię</label>
-                    <select class="form-select" id="floatingCategory" aria-label="Floating label select example" name="category">
-                      <option selected="">Choose...</option>
-                      <option>...</option>
+                    <select class="form-select" id="removeCategoryName" name="removeCategoryName">
+                      <option value="-1" selected>Wybierz kategorię...</option>
                     </select>
+
+                    <?php if (array_key_exists('removeCategoryName', $errors)) : ?>
+                      <div class="error">
+                        <?php echo e($errors['removeCategoryName'][0]); ?>
+                      </div>
+                    <?php endif; ?>
+
                   </div>
                   <button name="submitRemoveCategoryForm" class="btn btn-danger" type="submit" aria-current="page">Usuń kategorię</button>
 
@@ -294,7 +311,7 @@
 
                         <div class="modal-footer">
                           <div>
-                            <a href="" class="btn btn-success" aria-current="page">Wróć</a>
+                            <a href="/settings" class="btn btn-success" aria-current="page">Wróć</a>
                           </div>
                         </div>
                       </div>
@@ -315,6 +332,33 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
   <script>
+    const outcomesCategories = <?php echo $outcomesCategories ?>;
+    const incomesCategories = <?php echo $incomesCategories ?>;
+    console.log("Outcomes Categories:", outcomesCategories);
+    console.log("Incomes Categories:", incomesCategories);
+
+    const typeSelect = document.getElementById('removeCategoryType');
+    const categorySelect = document.getElementById('removeCategoryName');
+
+    function loadCategories(categories) {
+      categorySelect.innerHTML = '<option value="-1" selected>Wybierz kategorię...</option>';
+
+      categories.forEach(category => {
+        const option = document.createElement('option');
+        option.value = category.id;
+        option.textContent = category.name;
+        categorySelect.appendChild(option);
+      });
+    }
+
+    typeSelect.addEventListener('change', function() {
+      if (this.value === 'przychody') {
+        loadCategories(incomesCategories);
+      } else if (this.value === 'wydatki') {
+        loadCategories(outcomesCategories)
+      }
+    });
+
     document.addEventListener('DOMContentLoaded', function() {
       <?php if (isset($_SESSION['success_profileUpdate']) && $_SESSION['success_profileUpdate']): ?>
         <?php $_SESSION['success_profileUpdate'] = false; ?>
@@ -333,7 +377,7 @@
 
       <?php if (isset($_SESSION['category_removed']) && $_SESSION['category_removed']): ?>
         <?php $_SESSION['category_removed'] = false; ?>
-        showSuccessModal('removedCategoryModal');
+        showSuccessModal('removeCategoryModal');
       <?php endif; ?>
 
       function showSuccessModal(modalId) {

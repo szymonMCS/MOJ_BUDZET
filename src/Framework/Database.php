@@ -51,6 +51,6 @@ class Database
 
   public function fetchAll()
   {
-    return $this->stmt->fetchAll();
+    return $this->stmt->fetchAll(PDO::FETCH_ASSOC);
   }
 }

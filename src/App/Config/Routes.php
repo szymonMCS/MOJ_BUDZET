@@ -25,7 +25,7 @@ use App\Middleware\{
 function registerRoutes(App $app)
 {
   $app->get('/', [AboutController::class, 'about'])->add([GuestOnlyMiddleware::class]);
-  $app->get('/home', [HomeController::class, 'home'])->add([AuthRequiredMiddleware::class]);
+  $app->get('/home', [HomeController::class, 'home'])->add([IncomesCategoriesMiddleware::class, OutcomesCategoriesMiddleware::class, AuthRequiredMiddleware::class]);
   $app->get('/register', [AuthController::class, 'registerView'])->add([GuestOnlyMiddleware::class]);
   $app->post('/register', [AuthController::class, 'register'])->add([GuestOnlyMiddleware::class]);
   $app->get('/login', [AuthController::class, 'loginView'])->add([GuestOnlyMiddleware::class]);
@@ -36,8 +36,8 @@ function registerRoutes(App $app)
   $app->post('/outcome', [TransactionController::class, 'outcome'])->add([OutcomesCategoriesMiddleware::class, AuthRequiredMiddleware::class]);
   $app->get('/balance', [BalanceController::class, 'balance'])->add([BalanceDateMiddleware::class, AuthRequiredMiddleware::class]);
   $app->post('/balance', [BalanceController::class, 'balance'])->add([BalanceDateMiddleware::class, AuthRequiredMiddleware::class]);
-  $app->get('/settings', [SettingsController::class, 'settingsView'])->add([AuthRequiredMiddleware::class]);
-  $app->post('/settings', [SettingsController::class, 'profileEdit'])->add([AuthRequiredMiddleware::class]);
+  $app->get('/settings', [SettingsController::class, 'settingsView'])->add([IncomesCategoriesMiddleware::class, OutcomesCategoriesMiddleware::class, AuthRequiredMiddleware::class]);
+  $app->post('/settings', [SettingsController::class, 'profileEdit'])->add([IncomesCategoriesMiddleware::class, OutcomesCategoriesMiddleware::class, AuthRequiredMiddleware::class]);
   $app->get('/logout', [AuthController::class, 'logout'])->add([AuthRequiredMiddleware::class]);
 
   $app->setErrorHandler([ErrorController::class, 'notFound']);
