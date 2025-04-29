@@ -16,7 +16,8 @@ use Framework\Rules\{
   InRule,
   LengthMaxRule,
   NumericRule,
-  CorrectPassRule
+  CorrectPassRule,
+  BetweenCategoryRule
 };
 use Framework\Database;
 
@@ -34,11 +35,12 @@ class ValidatorService
     $this->validator->add('btwpassword', new BetweenPasswordRule());
     $this->validator->add('name', new NameRule());
     $this->validator->add('match', new MatchRule());
-    $this->validator->add('bot', new CaptchaRule());
+    //$this->validator->add('bot', new CaptchaRule());
     $this->validator->add('in', new InRule());
     $this->validator->add('lengthMax', new LengthMaxRule());
     $this->validator->add('isNumeric', new NumericRule());
     $this->validator->add('passok', new CorrectPassRule());
+    $this->validator->add('btwcategory', new BetweenCategoryRule());
   }
 
   public function validateRegister(array $formData)
@@ -49,7 +51,7 @@ class ValidatorService
       'password' => ['required', 'btwpassword:8,20'],
       'confirmPassword' => ['required', 'match:password'],
       'tos' => ['required'],
-      'bot' => ['bot:6Lc3uQcqAAAAANhhWprLaN6JeI9wwThVgKGh-UmK']
+      //'bot' => ['bot:6Lc3uQcqAAAAANhhWprLaN6JeI9wwThVgKGh-UmK']
     ]);
   }
 
@@ -112,7 +114,7 @@ class ValidatorService
   {
     $this->validator->validate($formData, [
       'newCategoryType' => ['required', 'in'],
-      'newCategoryName' => ['required', 'btwname:3,20']
+      'newCategoryName' => ['required', 'btwcategory:3,20']
     ]);
   }
 
@@ -121,6 +123,13 @@ class ValidatorService
     $this->validator->validate($formData, [
       'removeCategoryType' => ['required', 'in'],
       'removeCategoryName' => ['required', 'in']
+    ]);
+  }
+
+  public function validateEditCategory(array $formData)
+  {
+    $this->validator->validate($formData, [
+      'changedCategoryName' => ['required', 'btwcategory:3,20']
     ]);
   }
 }
