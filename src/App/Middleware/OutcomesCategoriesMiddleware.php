@@ -13,7 +13,7 @@ class OutcomesCategoriesMiddleware implements MiddlewareInterface
   public function process(callable $next)
   {
     $categories = $this->db->query(
-      'SELECT id, name FROM expenses_category_assigned_to_users WHERE user_id = :user_id',
+      'SELECT id, name, `limit` FROM expenses_category_assigned_to_users WHERE user_id = :user_id',
       [
         'user_id' => $_SESSION['logged_id']
       ]

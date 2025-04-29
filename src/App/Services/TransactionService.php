@@ -7,6 +7,7 @@ namespace App\Services;
 use Framework\Database;
 use Framework\Exceptions\ValidationException;
 use DateTime;
+use DateTimeZone;
 
 class TransactionService
 {
@@ -276,5 +277,68 @@ class TransactionService
       );
     }
     $_SESSION['category_removed'] = true;
+  }
+
+  public function editCategory(array $formData)
+  {
+    if ($formData['editCategoryType'] === 'przychody') {
+
+      $editedIncomeCategoryId = $this->db->query(
+        'SELECT id FROM incomes_category_assigned_to_users WHERE
+        user_id = :user_id AND name = :name',
+        [
+          'user_id' => $_SESSION['logged_id'],
+          'name' => $formData['editCategoryName']
+        ]
+      )->fetch();
+
+      $this->db->query(
+        'UPDATE incomes_category_assigned_to_users SET name = :name
+        WHERE id = :id',
+        [
+          'id' => $editedIncomeCategoryId,
+          'name' => $formData['changedCategoryName']
+        ]
+      );
+    } else if ($formData['editCategoryType'] === 'wydatki') {
+
+      $editedOutcomeCategory = $this->db->query(
+        'SELECT * FROM expenses_category_assigned_to_users WHERE
+        user_id = :user_id AND name = :name',
+        [
+          'user_id' => $_SESSION['logged_id'],
+          'name' => $formData['editCategoryName']
+        ]
+      )->fetch();
+
+      $categoryId = $editedOutcomeCategory['id'];
+      $categoryLimit = $editedOutcomeCategory['limit'];
+
+      if ($categoryLimit === null) {
+        $_SESSION['categoryLimitSet'] = false;
+
+        $this->db->query(
+          'UPDATE expenses_category_assigned_to_users SET name = :name
+          WHERE id = :id',
+          [
+            'name' => $formData['changedCategoryName'],
+            'id' => $categoryId
+          ]
+        );
+      } else {
+        $_SESSION['categoryLimitSet'] = true; //jak zaznaczymy booxa a było null też
+
+        $this->db->query(
+          'UPDATE expenses_category_assigned_to_users SET name = :name,
+          `limit` = :categoryLimit WHERE id = :id',
+          [
+            'name' => $formData['changedCategoryName'],
+            'limit' => $formData['newCategoryLimit'],
+            'id' => $categoryId
+          ]
+        );
+      }
+    }
+    $_SESSION['category_edited'] = true;
   }
 }

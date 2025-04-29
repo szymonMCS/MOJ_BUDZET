@@ -1,6 +1,10 @@
 <?php
 $incomesCategories = json_encode($_SESSION['incomesCategories']);
 $outcomesCategories = json_encode($_SESSION['outcomesCategories']);
+$oldFormData = $oldFormData ?? [];
+$errors = $errors ?? [];
+$_SESSION['openEditModalAtStart'] = false;
+$openEditModalAtStart = count($oldFormData) > 0;
 ?>
 <?php include $this->resolve("partials/_head.php"); ?>
 <link rel="stylesheet" href="/assets/settings.css">
@@ -94,7 +98,7 @@ $outcomesCategories = json_encode($_SESSION['outcomesCategories']);
                   <?php include $this->resolve("partials/_csrf.php"); ?>
                   <div class="form-group">
                     <label for="username">Imie</label>
-                    <input type="text" class="form-control" id="floatingInput" value="<?php echo e($_SESSION['username']); ?>" name="username" />
+                    <input type="text" class="form-control" id="username" value="<?php echo e($_SESSION['username']); ?>" name="username" />
                   </div>
 
                   <?php if (array_key_exists('username', $errors)) : ?>
@@ -224,10 +228,10 @@ $outcomesCategories = json_encode($_SESSION['outcomesCategories']);
                   <?php include $this->resolve("partials/_csrf.php"); ?>
                   <div class="form-group">
                     <label class="d-block">Wybierz typ</label>
-                    <select class="form-select" id="floatingCategory" aria-label="Floating label select example" name="newCategoryType">
+                    <select class="form-select" id="newCategoryType" name="newCategoryType">
                       <option value="-1" selected>Wybierz typ...</option>
-                      <option>przychody</option>
-                      <option>wydatki</option>
+                      <option value="incomes">przychody</option>
+                      <option value="outcomes">wydatki</option>
                     </select>
 
                     <?php if (array_key_exists('newCategoryType', $errors)) : ?>
@@ -246,7 +250,23 @@ $outcomesCategories = json_encode($_SESSION['outcomesCategories']);
                       </div>
                     <?php endif; ?>
 
+                    <div id="addLimitOptions" style="display: none">
+                      <hr>
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="addLimitCheckbox">
+                        <label class="form-check-label" for="addLimitCheckbox">
+                          Dodaj limit
+                        </label>
+                      </div>
+                      <hr>
+                      <div id="limitInput" style="display: none">
+                        <label class="d-block mt-2">Wpisz limit</label>
+                        <input type="number" class="form-control mt-1" placeholder="Wpisz limit" name="newCategoryLimit">
+                      </div>
+                      <hr>
+                    </div>
                   </div>
+
                   <button name="submitAddCategoryForm" class="btn btn-info" type="submit" aria-current="page">Dodaj</button>
 
                   <div class="modal fade" id="addCategoryModal" tabindex="-1" aria-labelledby="addCategoryModalLabel" aria-hidden="true">
@@ -276,8 +296,8 @@ $outcomesCategories = json_encode($_SESSION['outcomesCategories']);
                     <label class="d-block">Wybierz typ</label>
                     <select class="form-select" id="removeCategoryType" name="removeCategoryType">
                       <option value="-1" selected>Wybierz typ...</option>
-                      <option value="przychody">przychody</option>
-                      <option value="wydatki">wydatki</option>
+                      <option value="incomes">przychody</option>
+                      <option value="outcomes">wydatki</option>
                     </select>
 
                     <?php if (array_key_exists('removeCategoryType', $errors)) : ?>
@@ -318,6 +338,115 @@ $outcomesCategories = json_encode($_SESSION['outcomesCategories']);
                     </div>
                   </div>
                 </form>
+                <hr>
+
+                <h6>EDYTUJ KATEGORIE</h6>
+                <hr>
+                <form method="post" name="editCategoryForm" id="editCategoryForm">
+                  <?php include $this->resolve("partials/_csrf.php"); ?>
+                  <div class="form-group">
+                    <label class="d-block">Wybierz typ</label>
+                    <select class="form-select" id="editCategoryType" name="editCategoryType">
+                      <option value="-1">Wybierz typ...</option>
+                      <option value="incomes"
+                        <?= ($oldFormData['editCategoryType'] ?? '') === 'incomes' ? 'selected' : '' ?>>
+                        Przychody
+                      </option>
+                      <option value="outcomes"
+                        <?= ($oldFormData['editCategoryType'] ?? '') === 'outcomes' ? 'selected' : '' ?>>
+                        Wydatki
+                      </option>
+                    </select>
+
+                    <hr>
+                    <label class="d-block">Wybierz kategorię</label>
+                    <select class="form-select" id="editCategoryName" name="editCategoryName">
+                      <option value="-1">Wybierz kategorię...</option>
+                      <?php
+                      $cats = ($oldFormData['editCategoryType'] ?? '') === 'incomes'
+                        ? $_SESSION['incomesCategories']
+                        : $_SESSION['outcomesCategories'];
+                      foreach ($cats as $cat):
+                      ?>
+                        <option value="<?= e($cat['id']) ?>" data-limit="<?= e($cat['limit']) ?>"
+                          <?= ((string)($oldFormData['editCategoryName'] ?? '') === (string)$cat['id'])
+                            ? 'selected' : '' ?>>
+                          <?= e($cat['name']) ?>
+                        </option>
+                      <?php endforeach; ?>
+                    </select>
+
+                  </div>
+                  <button id="openEditModal" class="btn btn-info" type="button" aria-current="page">Edytuj</button>
+
+                  <div class="modal fade" id="editCategoryModal" tabindex="-1" aria-labelledby="editCategoryModalLabel">
+                    <div class="modal-dialog modal-dialog-centered">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h1 class="modal-title fs-5" id="editCategoryModalLabel">Edytuj kategorie</h1>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+
+                        <div class="modal-body">
+                          <label class="d-block">Wpisz nową nazwe</label>
+                          <input type="text" class="form-control mt-1" placeholder="Wpisz nową nazwe kategorii..." name="changedCategoryName" id="changedCategoryName" value="<?= e($oldFormData['changedCategoryName'] ?? '') ?>" />
+
+                          <?php if (isset($errors['changedCategoryName'])): ?>
+                            <div class="error" id="modalError">
+                              <?= e($errors['changedCategoryName'][0]) ?>
+                            </div>
+                          <?php endif; ?>
+
+                          <div id="editLimitOptions" style="<?= empty($cats) ? 'display:none' : '' ?>">
+                            <hr>
+                            <div class="form-check" id="editorBox" style="display: none">
+                              <input class="form-check-input" type="checkbox" id="editLimitCheckbox">
+                              <label class="form-check-label" for="editLimitCheckbox">Dodaj limit</label>
+                            </div>
+                            <hr>
+                            <div id="addInEditLimitInput"
+                              style="<?= empty($oldFormData['addInEditLimitInput']) ? 'display:none' : '' ?>">
+                              <label class="d-block mt-2">Wpisz nowy limit</label>
+                              <input type="number" class="form-control mt-1" placeholder="Wpisz limit" name="addInEditLimitInput">
+                            </div>
+                            <div id="editLimitInput" style="<?= empty($oldFormData['editLimitInput']) ? 'display:none' : '' ?>">
+                              <label class="d-block mt-2">Edytuj obecny limit</label>
+                              <input type="number" class="form-control mt-1" placeholder="Wpisz limit" name="editLimitInput"
+                                value="<?= e($oldFormData['editLimitInput'] ?? '') ?>">
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="modal-footer">
+                          <div>
+                            <button name="submitEditCategoryForm" type="submit" class="btn btn-success">Akceptuj</button>
+                          </div>
+                          <div>
+                            <a data-bs-dismiss="modal" class="btn btn-danger" aria-current="page">Anuluj</a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="modal fade" id="succesCategoryEditModal" tabindex="-1" aria-labelledby="succesCategoryEditModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h1 class="modal-title fs-5" id="removeCategoryLabel">Kategoria zmieniona pomyślnie</h1>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+
+                        <div class="modal-footer">
+                          <div>
+                            <a href="/settings" class="btn btn-success" aria-current="page">Wróć</a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+                <hr>
               </div>
 
             </div>
@@ -332,65 +461,30 @@ $outcomesCategories = json_encode($_SESSION['outcomesCategories']);
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
   <script>
-    const outcomesCategories = <?php echo $outcomesCategories ?>;
-    const incomesCategories = <?php echo $incomesCategories ?>;
-    console.log("Outcomes Categories:", outcomesCategories);
-    console.log("Incomes Categories:", incomesCategories);
-
-    const typeSelect = document.getElementById('removeCategoryType');
-    const categorySelect = document.getElementById('removeCategoryName');
-
-    function loadCategories(categories) {
-      categorySelect.innerHTML = '<option value="-1" selected>Wybierz kategorię...</option>';
-
-      categories.forEach(category => {
-        const option = document.createElement('option');
-        option.value = category.id;
-        option.textContent = category.name;
-        categorySelect.appendChild(option);
-      });
-    }
-
-    typeSelect.addEventListener('change', function() {
-      if (this.value === 'przychody') {
-        loadCategories(incomesCategories);
-      } else if (this.value === 'wydatki') {
-        loadCategories(outcomesCategories)
+    window.settingsData = {
+      incomesCategories: <?= $incomesCategories; ?>,
+      outcomesCategories: <?= $outcomesCategories; ?>,
+      openEditModalAtStart: <?= json_encode($openEditModalAtStart); ?>,
+      oldFormData: <?= json_encode($oldFormData); ?>,
+      errors: <?= json_encode($errors); ?>,
+      successFlags: {
+        profileUpdate: <?= json_encode(isset($_SESSION['success_profileUpdate']) && $_SESSION['success_profileUpdate']); ?>,
+        passwordUpdate: <?= json_encode(isset($_SESSION['success_passwordUpdate']) && $_SESSION['success_passwordUpdate']); ?>,
+        categoryAdded: <?= json_encode(isset($_SESSION['category_added']) && $_SESSION['category_added']); ?>,
+        categoryRemoved: <?= json_encode(isset($_SESSION['category_removed']) && $_SESSION['category_removed']); ?>,
+        categoryEdited: <?= json_encode(isset($_SESSION['category_edited']) && $_SESSION['category_edited']); ?>
       }
-    });
-
-    document.addEventListener('DOMContentLoaded', function() {
-      <?php if (isset($_SESSION['success_profileUpdate']) && $_SESSION['success_profileUpdate']): ?>
-        <?php $_SESSION['success_profileUpdate'] = false; ?>
-        showSuccessModal('usernameModal');
-      <?php endif; ?>
-
-      <?php if (isset($_SESSION['success_passwordUpdate']) && $_SESSION['success_passwordUpdate']): ?>
-        <?php $_SESSION['success_passwordUpdate'] = false; ?>
-        showSuccessModal('passwordModal');
-      <?php endif; ?>
-
-      <?php if (isset($_SESSION['category_added']) && $_SESSION['category_added']): ?>
-        <?php $_SESSION['category_added'] = false; ?>
-        showSuccessModal('addCategoryModal');
-      <?php endif; ?>
-
-      <?php if (isset($_SESSION['category_removed']) && $_SESSION['category_removed']): ?>
-        <?php $_SESSION['category_removed'] = false; ?>
-        showSuccessModal('removeCategoryModal');
-      <?php endif; ?>
-
-      function showSuccessModal(modalId) {
-        var myModal = new bootstrap.Modal(document.getElementById(modalId));
-        myModal.show();
-      }
-    });
-
-    document.getElementById('openDeleteModal').addEventListener('click', function() {
-      var myModal = new bootstrap.Modal(document.getElementById('delAccountModal'));
-      myModal.show();
-    });
+    };
   </script>
+  <?php
+  unset(
+    $_SESSION['success_profileUpdate'],
+    $_SESSION['success_passwordUpdate'],
+    $_SESSION['category_added'],
+    $_SESSION['category_removed'],
+    $_SESSION['category_edited']
+  );
+  ?>
   <script src="/assets/settings.js" charset="utf-8"></script>
 </body>
 
