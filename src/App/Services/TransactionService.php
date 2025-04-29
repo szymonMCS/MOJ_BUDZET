@@ -234,8 +234,7 @@ class TransactionService
 
   public function addCategory(array $formData)
   {
-    if ($formData['newCategoryType'] === 'przychody') {
-
+    if ($formData['newCategoryType'] === 'incomes') {
       $this->db->query(
         'INSERT INTO incomes_category_assigned_to_users VALUES (NULL, :user_id, :name)',
         [
@@ -243,14 +242,25 @@ class TransactionService
           'name' => $formData['newCategoryName']
         ]
       );
-    } else if ($formData['newCategoryType'] === 'wydatki') {
-      $this->db->query(
-        'INSERT INTO expenses_category_assigned_to_users VALUES (NULL, :user_id, :name)',
-        [
-          'user_id' => $_SESSION['logged_id'],
-          'name' => $formData['newCategoryName']
-        ]
-      );
+    } else if ($formData['newCategoryType'] === 'outcomes') {
+      if (strlen($formData['newCategoryLimit']) > 0) {
+        $this->db->query(
+          'INSERT INTO expenses_category_assigned_to_users (user_id, name, `limit`) VALUES (:user_id, :name, :limit)',
+          [
+            'user_id' => $_SESSION['logged_id'],
+            'name' => $formData['newCategoryName'],
+            'limit' => $formData['newCategoryLimit']
+          ]
+        );
+      } else {
+        $this->db->query(
+          'INSERT INTO expenses_category_assigned_to_users (user_id, name, `limit`) VALUES (:user_id, :name, NULL)',
+          [
+            'user_id' => $_SESSION['logged_id'],
+            'name' => $formData['newCategoryName']
+          ]
+        );
+      }
     }
     $_SESSION['category_added'] = true;
   }
@@ -259,7 +269,7 @@ class TransactionService
   {
     $selectedCategoryId = (int) $formData['removeCategoryName'];
 
-    if ($formData['removeCategoryType'] === 'przychody') {
+    if ($formData['removeCategoryType'] === 'incomes') {
 
       $this->db->query(
         'DELETE FROM incomes_category_assigned_to_users WHERE id = :id',
@@ -267,7 +277,7 @@ class TransactionService
           'id' => $selectedCategoryId
         ]
       );
-    } else if ($formData['removeCategoryType'] === 'wydatki') {
+    } else if ($formData['removeCategoryType'] === 'outcomes') {
 
       $this->db->query(
         'DELETE FROM expenses_category_assigned_to_users WHERE id = :id',
@@ -281,60 +291,50 @@ class TransactionService
 
   public function editCategory(array $formData)
   {
-    if ($formData['editCategoryType'] === 'przychody') {
+    $editedCategoryId = $formData['editCategoryName'];
 
-      $editedIncomeCategoryId = $this->db->query(
-        'SELECT id FROM incomes_category_assigned_to_users WHERE
-        user_id = :user_id AND name = :name',
-        [
-          'user_id' => $_SESSION['logged_id'],
-          'name' => $formData['editCategoryName']
-        ]
-      )->fetch();
+    if ($formData['editCategoryType'] === 'incomes') {
 
       $this->db->query(
         'UPDATE incomes_category_assigned_to_users SET name = :name
         WHERE id = :id',
         [
-          'id' => $editedIncomeCategoryId,
+          'id' => $editedCategoryId,
           'name' => $formData['changedCategoryName']
         ]
       );
-    } else if ($formData['editCategoryType'] === 'wydatki') {
+    } else if ($formData['editCategoryType'] === 'outcomes') {
 
-      $editedOutcomeCategory = $this->db->query(
-        'SELECT * FROM expenses_category_assigned_to_users WHERE
-        user_id = :user_id AND name = :name',
-        [
-          'user_id' => $_SESSION['logged_id'],
-          'name' => $formData['editCategoryName']
-        ]
-      )->fetch();
+      $addInEditLimitInput = $formData['addInEditLimitInput'];
+      $editLimitInput = $formData['editLimitInput'];
 
-      $categoryId = $editedOutcomeCategory['id'];
-      $categoryLimit = $editedOutcomeCategory['limit'];
+      if (strlen($addInEditLimitInput) > 0) {
 
-      if ($categoryLimit === null) {
-        $_SESSION['categoryLimitSet'] = false;
+        $this->db->query(
+          'UPDATE expenses_category_assigned_to_users SET name = :name, `limit` = :categoryLimit WHERE id = :id',
+          [
+            'name' => $formData['changedCategoryName'],
+            'categoryLimit' => round((float)$addInEditLimitInput, 2),
+            'id' => $editedCategoryId
+          ]
+        );
+      } else if (strlen($editLimitInput) > 0) {
 
+        $this->db->query(
+          'UPDATE expenses_category_assigned_to_users SET name = :name, `limit` = :categoryLimit WHERE id = :id',
+          [
+            'name' => $formData['changedCategoryName'],
+            'categoryLimit' => round((float)$editLimitInput, 2),
+            'id' => $editedCategoryId
+          ]
+        );
+      } else {
         $this->db->query(
           'UPDATE expenses_category_assigned_to_users SET name = :name
           WHERE id = :id',
           [
             'name' => $formData['changedCategoryName'],
-            'id' => $categoryId
-          ]
-        );
-      } else {
-        $_SESSION['categoryLimitSet'] = true; //jak zaznaczymy booxa a było null też
-
-        $this->db->query(
-          'UPDATE expenses_category_assigned_to_users SET name = :name,
-          `limit` = :categoryLimit WHERE id = :id',
-          [
-            'name' => $formData['changedCategoryName'],
-            'limit' => $formData['newCategoryLimit'],
-            'id' => $categoryId
+            'id' => $editedCategoryId
           ]
         );
       }
