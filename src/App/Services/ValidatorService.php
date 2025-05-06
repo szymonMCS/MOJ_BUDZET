@@ -17,7 +17,8 @@ use Framework\Rules\{
   LengthMaxRule,
   NumericRule,
   CorrectPassRule,
-  BetweenCategoryRule
+  BetweenCategoryRule,
+  NormalNumberRule
 };
 use Framework\Database;
 
@@ -41,6 +42,7 @@ class ValidatorService
     $this->validator->add('isNumeric', new NumericRule());
     $this->validator->add('passok', new CorrectPassRule());
     $this->validator->add('btwcategory', new BetweenCategoryRule());
+    $this->validator->add('plusNum', new NormalNumberRule());
   }
 
   public function validateRegister(array $formData)
@@ -76,7 +78,7 @@ class ValidatorService
   public function validateOutcome(array $formData)
   {
     $this->validator->validate($formData, [
-      'amount' => ['required', 'isNumeric'],
+      'amount' => ['required', 'isNumeric', 'plusNum'],
       'date' => ['required'],
       'method' => ['required', 'in'],
       'category' => ['required', 'in'],

@@ -11,12 +11,14 @@ CREATE TABLE IF NOT EXISTS `expenses` (
 CREATE TABLE IF NOT EXISTS `expenses_category_assigned_to_users` (
   `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
-  `name` varchar(50) NOT NULL
+  `name` varchar(50) NOT NULL,
+  `limit` decimal(10,2) NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
 
 CREATE TABLE IF NOT EXISTS `expenses_category_default` (
   `id` int(11) NOT NULL,
-  `name` varchar(50) NOT NULL
+  `name` varchar(50) NOT NULL,
+  `limit` decimal(10,2) NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
 
 CREATE TABLE IF NOT EXISTS `incomes` (

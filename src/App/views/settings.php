@@ -255,7 +255,7 @@ $openEditModalAtStart = count($oldFormData) > 0;
                       <div class="form-check">
                         <input class="form-check-input" type="checkbox" id="addLimitCheckbox">
                         <label class="form-check-label" for="addLimitCheckbox">
-                          Dodaj limit
+                          Dodaj miesięczny limit
                         </label>
                       </div>
                       <hr>
@@ -401,16 +401,16 @@ $openEditModalAtStart = count($oldFormData) > 0;
                             <hr>
                             <div class="form-check" id="editorBox" style="display: none">
                               <input class="form-check-input" type="checkbox" id="editLimitCheckbox">
-                              <label class="form-check-label" for="editLimitCheckbox">Dodaj limit</label>
+                              <label class="form-check-label" for="editLimitCheckbox">Dodaj miesięczny limit</label>
                             </div>
                             <hr>
                             <div id="addInEditLimitInput"
                               style="<?= empty($oldFormData['addInEditLimitInput']) ? 'display:none' : '' ?>">
-                              <label class="d-block mt-2">Wpisz nowy limit</label>
+                              <label class="d-block mt-2">Wpisz nowy miesięczny limit</label>
                               <input type="number" class="form-control mt-1" placeholder="Wpisz limit" name="addInEditLimitInput">
                             </div>
                             <div id="editLimitInput" style="<?= empty($oldFormData['editLimitInput']) ? 'display:none' : '' ?>">
-                              <label class="d-block mt-2">Edytuj obecny limit</label>
+                              <label class="d-block mt-2">Edytuj obecny miesięczny limit</label>
                               <input type="number" class="form-control mt-1" placeholder="Wpisz limit" name="editLimitInput"
                                 value="<?= e($oldFormData['editLimitInput'] ?? '') ?>">
                             </div>
