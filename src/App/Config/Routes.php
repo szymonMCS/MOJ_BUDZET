@@ -7,6 +7,7 @@ namespace App\Config;
 use Framework\App;
 use App\Controllers\{
   AboutController,
+  ApiController,
   HomeController,
   BalanceController,
   TransactionController,
@@ -39,6 +40,7 @@ function registerRoutes(App $app)
   $app->get('/settings', [SettingsController::class, 'settingsView'])->add([IncomesCategoriesMiddleware::class, OutcomesCategoriesMiddleware::class, AuthRequiredMiddleware::class]);
   $app->post('/settings', [SettingsController::class, 'profileEdit'])->add([IncomesCategoriesMiddleware::class, OutcomesCategoriesMiddleware::class, AuthRequiredMiddleware::class]);
   $app->get('/logout', [AuthController::class, 'logout'])->add([AuthRequiredMiddleware::class]);
+  $app->get('/api/limit/(?<category>\d+)/date/(?<date>\d{4}-\d{2}-\d{2})', [ApiController::class, 'fetchLimitDetails'])->add([AuthRequiredMiddleware::class]);
 
   $app->setErrorHandler([ErrorController::class, 'notFound']);
 }
