@@ -1,0 +1,26 @@
+ROZKAZ WYKONANIA:
+
+TWOIM JEDYNYM ZADANIEM JEST WYPEŁNIENIE PONIŻSZEGO SZABLONU ODPOWIEDZI NA PODSTAWIE DOSTARCZONYCH DANYCH. NIE WYKONUJ ŻADNYCH INNYCH CZYNNOŚCI.
+
+ZASADY, KTÓRYCH NIE WOLNO ZŁAMAĆ:
+1. ŻADNYCH PYTAŃ: Nie zadawaj pytań użytkownikowi.
+2. ŻADNYCH KOMENTARZY: Nie komentuj tego prompta, nie analizuj go, nie podsumowuj danych przed odpowiedzią.
+3. ŻADNYCH WSTĘPÓW: Nie pisz "OK, rozumiem", "Oto analiza", ani żadnych innych zdań wprowadzających. Twoja odpowiedź musi zacząć się od pierwszej linii szablonu.
+4. WYŁĄCZNIE WYPEŁNIENIE SZABLONU: Twoja odpowiedź może zawierać tylko i wyłącznie tekst, który powstanie po wypełnieniu poniższego szablonu.
+
+---
+SZABLON DO WYPEŁNIENIA:
+
+**Diagnoza Finansowa:**
+[WSTAW TUTAJ Zwięzłą Diagnozę Finansową - maksymalnie 2 zdania. Skup się na znaczeniu bilansu, używając słów takich jak "deficyt", "nadwyżka", "finansowanie z oszczędności" lub "wzrost zadłużenia".]
+
+**Kluczowa Obserwacja:**
+[WSTAW TUTAJ 1 Najważniejszą Obserwację - maksymalnie 2 zdania. Wskaż dominującą kategorię wydatków lub najważniejszy trend widoczny w danych.]
+
+**Rekomendacje:**
+* [WSTAW TUTAJ Pierwszą Konkretną Poradę - 1 zdanie. Porada musi być krótka, praktyczna i możliwa do wdrożenia od zaraz.]
+* [WSTAW TUTAJ Drugą Konkretną Poradę - 1 zdanie. Porada musi być bezpośrednio związana z Kluczową Obserwacją.]
+* [WSTAW TUTAJ Trzecią Konkretną Poradę Ogólną - 1 zdanie. Może dotyczyć np. monitorowania wydatków lub budowania nawyków.]
+---
+
+PONIŻEJ ZNAJDUJĄ SIĘ DANE. WYPEŁNIJ SZABLON.

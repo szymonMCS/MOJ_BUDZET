@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+require __DIR__ . "/../../vendor/autoload.php";
+
 use Framework\{TemplateEngine, Database, Container};
 use App\Config\Paths;
 use App\Services\{
@@ -32,6 +34,9 @@ return [
   },
   ApiService::class => function (Container $container) {
     $db = $container->get(Database::class);
-    return new ApiService($db);
+    $apiURL = $_ENV['GEMINI_API_URL'] ?? null;
+    $promptFilePath = Paths::FINANCIAL_ADVISOR_PROMPT;
+    $promptContent = file_get_contents($promptFilePath);
+    return new ApiService($db, $apiURL, $promptContent);
   }
 ];

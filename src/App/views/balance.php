@@ -202,6 +202,14 @@
           <h2 id="balanceSum" class="my-4"></h2>
           <div style="border: 1px solid black; width: 70%;"></div>
           <h3 id="balanceDescription" class="mb-4 mt-3 pb-4"></h3>
+
+          <?php if (!empty($geminiResponse)): ?>
+            <div class="container d-flex flex-column justify-content-center align-items-center my-4 py-4">
+              <h4 style="font-weight: bold;">Rada od Asystenta Finansowego AI:</h4>
+              <p id="gemini-advice" style="white-space: pre-wrap; text-align: left; max-width: 800px;"><?php echo e($geminiResponse); ?></p>
+            </div>
+          <?php endif; ?>
+
         </div>
       </section>
     </main>

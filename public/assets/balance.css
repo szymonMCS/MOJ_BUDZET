@@ -6,6 +6,10 @@
   width: 230px !important;
 }
 
+#gemini-advice {
+  margin-top: 10px;
+}
+
 p{
   margin-bottom: 0 !important;
 }
@@ -40,14 +44,12 @@ table {
     border-collapse: collapse;
 }
 
-
-
 .resizable-column {
-    min-width: 100px; /* Minimalna szerokość */
-    max-width: 300px; /* Maksymalna szerokość */
-    white-space: nowrap; /* Zapobiega zawijaniu tekstu */
-    overflow: hidden; /* Ukrywa nadmiar tekstu */
-    text-overflow: ellipsis; /* Dodaje "..." gdy tekst jest za długi */
+    min-width: 100px;
+    max-width: 300px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .container h1 {
