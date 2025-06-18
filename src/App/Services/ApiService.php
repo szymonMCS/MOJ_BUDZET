@@ -8,7 +8,11 @@ use Framework\Database;
 
 class ApiService
 {
-  public function __construct(private Database $db) {}
+  public function __construct(
+    private Database $db,
+    private string $apiURL,
+    private string $promptContent
+  ) {}
 
   public function fetchLimit($categoryId): array|false
   {
@@ -47,5 +51,52 @@ class ApiService
     }
 
     return $spentSum;
+  }
+
+  public function getResponseFromGemini($incomes, $expenses): string
+  {
+    if (empty($incomes) && empty($expenses)) {
+      return "Brak przychodów i wydatków w wybranym okresie, analiza nie jest możliwa.";
+    }
+
+    $formattedIncomes = !empty($incomes) ? json_encode($incomes) : '[]';
+    $formattedOutcomes = !empty($expenses) ? json_encode($expenses) : '[]';
+    $financialData = "Przychody: " . $formattedIncomes . "\n\n" . "Wydatki: " . $formattedOutcomes;
+    $initialPrompt = $this->promptContent . "\n\n" . "Oto dane finansowe użytkownika, których dotyczy zapytanie:" . "\n\n" . $financialData;
+    $requestBody = json_encode([
+      'contents' => [
+        [
+          'parts' => [
+            ['text' => $initialPrompt]
+          ]
+        ]
+      ]
+    ]);
+
+    $options = [
+      'http' => [
+        'header' => "Content-Type: application/json\r\n",
+        'method' => 'POST',
+        'content' => $requestBody,
+        'ignore_errors' => true
+      ]
+    ];
+
+    $context = stream_context_create($options);
+    $response = @file_get_contents($this->apiURL, false, $context);
+
+    if ($response === false) {
+      return "Błąd: Nie udało się połączyć z API Gemini.";
+    }
+
+    $responseData = json_decode($response, true);
+
+    if (isset($responseData['error'])) {
+      return "Błąd API: " . $responseData['error']['message'];
+    }
+
+    $apiResponseText = $responseData['candidates'][0]['content']['parts'][0]['text'] ?? "Coś poszło nie tak z połączniem z GEMINI.";
+
+    return trim($apiResponseText);
   }
 }

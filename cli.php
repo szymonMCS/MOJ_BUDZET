@@ -10,6 +10,6 @@ $db = new Database($_ENV['DB_DRIVER'], [
   'dbname' => $_ENV['DB_NAME']
 ], $_ENV['DB_USER'], $_ENV['DB_PASS']);
 
-$sqlFile = file_get_contents("./database.sql");
+$sqlFile = file_get_contents("database.sql");
 
 $db->query($sqlFile);
